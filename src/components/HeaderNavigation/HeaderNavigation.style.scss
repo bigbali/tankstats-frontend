@@ -1,0 +1,37 @@
+.header-navigation {
+    margin-left: 4rem;
+}
+
+.header-navigation-link {
+    display: inline-block;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-right: 2rem;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    color: var(--color-main-foreground);
+    background-image: linear-gradient(var(--color-theme), var(--color-theme));
+    background-repeat: no-repeat;
+    background-size: 120% 1rem;
+    background-position: 0 calc(100% + 1rem);
+    transition:
+        background-size 0.1s ease,
+        background-position 0.1s ease,
+        color 0.1s;
+
+    &:hover {
+        background-size: 120% 100%;
+        background-position: 0 0;
+        color: var(--color-white);
+    }
+
+    &.active {
+        background-size: 120% 3px;
+        background-position: 0 100%;
+
+        &:hover {
+            background-size: 120% 100%;
+            background-position: 0 100%;
+        }
+    }
+}

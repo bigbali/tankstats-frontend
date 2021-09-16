@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;700&display=swap');
+
+:root {
+    --color-main-background: #{rgba(192, 211, 222, 0.2)};
+    --color-main-foreground: #{rgba(0, 0, 0, 0.75)};
+    --color-light-gray: #{rgba(0, 0, 0, 0.5)};
+    --color-white: #{white};
+    --color-theme: #{#D10000};
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: "Raleway";
+    color: var(--color-main-foreground);
+    margin: 0;
+}
+
+main {
+    padding-left: 5rem;
+    padding-right: 5rem;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+a {
+    text-decoration: none;
+}
