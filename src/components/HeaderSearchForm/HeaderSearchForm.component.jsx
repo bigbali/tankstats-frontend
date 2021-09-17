@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import InputDropdown from '../InputDropdown/InputDropdown.component';
-import InputField from '../SearchField/InputField.component';
+import InputField from '../InputField/InputField.component';
 import './HeaderSearchForm.style.scss';
 
 const searchTypes = ["player", "clan"];
@@ -25,7 +25,11 @@ const HeaderSearchForm = () => {
     }
 
     const handleSubmit = (id) => {
-        alert(`Submitted: ${id}`)
+        // fetch(`https://api.worldoftanks.eu/wot/account/list/?application_id=62da3ef417f70e5ffeb44cf6fa339e1e&search=${id}&limit=10`)
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(JSON.stringify(data));
+        //     })
     }
 
     return (
@@ -45,6 +49,8 @@ const HeaderSearchForm = () => {
                 placeholder={`Search for ${type}`}
                 onSubmit={handleSubmit}
                 type="text"
+                server={server}
+                searchType={type}
             />
         </form>
     )

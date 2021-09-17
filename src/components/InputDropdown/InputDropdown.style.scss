@@ -4,6 +4,7 @@
     user-select: none;
     text-transform: capitalize;
     cursor: pointer;
+    transition: background-color 0.1s;
 
     &.expanded {
         .chevron {
@@ -15,6 +16,10 @@
             pointer-events: all;
             transform: translateY(0);
         }
+    }
+
+    &:hover {
+        background-color: var(--color-lighter-light-gray);
     }
 }
 
