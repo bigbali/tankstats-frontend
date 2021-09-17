@@ -24,6 +24,10 @@ const HeaderSearchForm = () => {
         setId(newId);
     }
 
+    const handleSubmit = (id) => {
+        alert(`Submitted: ${id}`)
+    }
+
     return (
         <form
             className="header-search-form"
@@ -39,6 +43,8 @@ const HeaderSearchForm = () => {
                 value={server} />
             <InputField
                 placeholder={`Search for ${type}`}
+                onSubmit={handleSubmit}
+                type="text"
             />
         </form>
     )
