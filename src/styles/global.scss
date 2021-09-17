@@ -3,7 +3,9 @@
 :root {
     --color-main-background: #{rgba(192, 211, 222, 0.2)};
     --color-main-foreground: #{rgba(0, 0, 0, 0.75)};
+    --color-hover-highlight: #{rgba(177, 189, 197, 0.3)};
     --color-light-gray: #{rgba(0, 0, 0, 0.5)};
+    --color-darker-light-gray: #{rgba(0, 0, 0, 0.6)};
     --color-white: #{white};
     --color-theme: #{#D10000};
 }

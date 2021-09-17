@@ -12,25 +12,25 @@
     color: var(--color-main-foreground);
     background-image: linear-gradient(var(--color-theme), var(--color-theme));
     background-repeat: no-repeat;
-    background-size: 120% 1rem;
-    background-position: 0 calc(100% + 1rem);
+    background-size: 100% 0;
+    background-position: 0 100%;
     transition:
         background-size 0.1s ease,
         background-position 0.1s ease,
         color 0.1s;
 
     &:hover {
-        background-size: 120% 100%;
-        background-position: 0 0;
+        background-size: 100% 100%;
+        background-position: 0 100%;
         color: var(--color-white);
     }
 
     &.active {
-        background-size: 120% 3px;
+        background-size: 100% 0.2rem;
         background-position: 0 100%;
 
         &:hover {
-            background-size: 120% 100%;
+            background-size: 100% 100%;
             background-position: 0 100%;
         }
     }

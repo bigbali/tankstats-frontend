@@ -1,16 +1,48 @@
 import React from 'react';
 import { useState } from 'react';
+import { connect } from 'react-redux';
+import Chevron from '../../media/svg/chevron.svg';
+import actions from '../../redux/actions';
+import './InputDropdown.style.scss';
 
-const InputDropdown = (props) => {
-    const [selectedOption, setSelectedOption] = useState(0);
-    //TODO: use redux
+const InputDropdown = ({ options, value, onSelect }) => {
+    const [isExpanded, setExpanded] = useState(false);
 
-    return (
-        props.options.map(option => {
+    const mapOptionsToHtml = () => {
+        return options.map(option => {
             return (
-                null
+                <li key={option}
+                    className={`input-dropdown-option 
+                        ${value === option ? "selected" : ""}`}
+                    onClick={() => {
+                        onSelect(option)
+                        setExpanded(false);
+                    }}>
+                    {option}
+                </li>
             )
         })
+    }
+
+    return (
+        <div className={`input-dropdown 
+            ${isExpanded ? "expanded" : ""}`}>
+            <div
+                className="input-dropdown-visible"
+                onClick={() => {
+                    setExpanded(!isExpanded);
+                }}>
+                <span className="input-dropdown-selected">
+                    {value}
+                </span>
+                <img className="chevron"
+                    src={Chevron}
+                    alt="Expand" />
+            </div>
+            <ul className="input-dropdown-options">
+                {mapOptionsToHtml()}
+            </ul>
+        </div>
     )
 }
 
