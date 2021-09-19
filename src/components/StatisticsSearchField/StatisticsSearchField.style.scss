@@ -1,9 +1,9 @@
-.input-field {
+.statistics-search-field {
     display: flex;
     position: relative;
 }
 
-.input-field-input {
+.statistics-search-field-input {
     width: 20rem;
     height: 2rem;
     border: none;
@@ -24,7 +24,7 @@
     }
 }
 
-.input-field-submit {
+.statistics-search-field-submit {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -41,11 +41,14 @@
     }
 }
 
-.input-field-preview {
+.statistics-search-field-preview {
     position: absolute;
     top: 2.5rem;
-    width: 10rem;
+    width: auto;
+    min-width: 10rem;
+    max-width: 25rem;
     height: auto;
+    max-height: 80vh;
     background-color: var(--color-white);
     box-shadow: 0 4px 35px rgba(155, 155, 155, 0.4);
     opacity: 0;
@@ -64,9 +67,25 @@
         pointer-events: all;
         transform: translateY(0);
     }
+
+    .error-message {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2rem;
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .error-title {
+        width: 100%;
+        font-size: 1.4rem;
+        font-weight: bold;
+    }
 }
 
-.input-field-preview-option {
+.statistics-search-field-preview-option {
     padding: 0.4rem;
     padding-left: 0.6rem;
     background-image: linear-gradient(var(--color-theme), var(--color-theme));
@@ -82,5 +101,15 @@
     &:hover {
         background-size: 100% 100%;
         color: var(--color-white);
+
+        .clan-tag {
+            color: var(--color-white) !important;
+        }
     }
+}
+
+.statistics-search-field-clan-prefetch {
+    font-family: "Roboto Mono";
+    font-size: 1.2rem;
+    font-weight: bold;
 }

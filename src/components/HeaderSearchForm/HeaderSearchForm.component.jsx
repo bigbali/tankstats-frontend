@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import InputDropdown from '../InputDropdown/InputDropdown.component';
-import InputField from '../InputField/InputField.component';
+import StatisticsSearchField from '../StatisticsSearchField/StatisticsSearchField.component';
 import './HeaderSearchForm.style.scss';
 
 const searchTypes = ["player", "clan"];
@@ -45,7 +45,7 @@ const HeaderSearchForm = () => {
                 options={serverOptions}
                 onSelect={handleServerChange}
                 value={server} />
-            <InputField
+            <StatisticsSearchField
                 placeholder={`Search for ${type}`}
                 onSubmit={handleSubmit}
                 type="text"

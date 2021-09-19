@@ -1,8 +1,10 @@
-export const appId = "62da3ef417f70e5ffeb44cf6fa339e1e";
-export const appIdParam = "?application_id=62da3ef417f70e5ffeb44cf6fa339e1e";
-export const apiPath = "https://api.worldoftanks.";
+export const GAME_ID = "wot";
+export const APP_ID = "62da3ef417f70e5ffeb44cf6fa339e1e";
+export const APP_ID_PARAM = "?application_id=62da3ef417f70e5ffeb44cf6fa339e1e";
+export const API_PATH = "https://api.worldoftanks";
 
-export const convertType = (type) => {
+
+export const getUrlSearchType = (type) => {
     if (type === "player") {
         return "account"
     }
@@ -14,29 +16,63 @@ export const convertType = (type) => {
     }
 }
 
-export const getQueryString = (
-    name,
-    server,
-    type,
-) => {
-    return `${apiPath}${server}/wot/${convertType(type)}/list/${appIdParam}&search=${name}&limit=10`
+export const getServerDomain = (server) => {
+    switch (server){
+        case "EU":
+            return ".eu"
+        case "NA":
+            return ".com"
+        case "RU":
+            return ".ru"
+        case "SEA":
+            return ".sea"
+        default:
+            return ".eu"
+    }
 }
 
-export const fetchHeaderSearchFormPreview = async (
+export const getPrefetchUrl = (
     name,
     server,
     type
 ) => {
-    const result = await fetch(
-        `https://api.worldoftanks.${server}/
-            wot/
-            ${convertType(type)}/
-            list/
-            ${appIdParam}
-            &search=${name}
-            &limit=10`
-    )
-    //
+    let url = [
+        `${API_PATH}${getServerDomain(server)}/`,
+        `${GAME_ID}/`,
+        `${getUrlSearchType(type)}/`,
+        "list/",
+        `${APP_ID_PARAM}`,
+        `&search=${name}`,
+        "&limit=10"
+    ]
 
-    return result
+    return url.join("")
 }
+
+// export const getQueryString = (
+//     name,
+//     server,
+//     type,
+// ) => {
+//     return `${apiPath}${server}/wot/${convertSearchType(type)}/list/${appIdParam}&search=${name}&limit=10`
+// }
+
+
+// export const fetchHeaderSearchFormPreview = async (
+//     name,
+//     server,
+//     type
+// ) => {
+//     const result = await fetch(
+//         `https://api.worldoftanks.${server}/
+//             wot/
+//             ${convertSearchType(type)}/
+//             list/
+//             ${appIdParam}
+//             &search=${name}
+//             &limit=10`
+//     )
+//     //
+
+//     return result
+// }
