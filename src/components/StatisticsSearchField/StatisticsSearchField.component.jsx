@@ -41,7 +41,14 @@ const StatisticsSearchField = ({
         setResponse({ data: [] })
     }, [server]);
 
+    // useEffect(() => {
+    //     if (value.value.length < minRequestLength && response.data.length !== 0) {
+    //         setResponse({ data: [] })
+    //     }
+    // }, [response]);
+
     const handleOnChange = (event) => {
+        const inputValue = event.target.value;
         const prefetch = () => {
             fetch(
                 getPrefetchUrl(inputValue, server, searchType)
@@ -52,13 +59,16 @@ const StatisticsSearchField = ({
                         // Reset message without causing re-render
                         message.message = "";
 
-                        setResponse({
-                            data: data.data
-                        })
+                        // Value could already be decremented when promise resolves
+                        if (value.value.length > minRequestLength) {
+                            setResponse({
+                                data: data.data
+                            })
+                        }
                     }
                     else if (data.status === "error"
                         && data.error.message === "REQUEST_LIMIT_EXCEEDED") {
-                        // Can't trigger
+                        // Can't write that fast...
                         setMessage({
                             message: "We can't keep up! Please, slow down!"
                         })
@@ -69,13 +79,11 @@ const StatisticsSearchField = ({
                 })
         }
 
-        const inputValue = event.target.value;
-
         if (inputValue.length > minRequestLength) {
             if (inputValue.length > 24) {
                 setMessage({
                     message:
-                        "Input limit exceeded." +
+                        "Input limit exceeded. " +
                         "Please keep your input to a maximum of 24 characters!"
                 })
             }
@@ -89,35 +97,15 @@ const StatisticsSearchField = ({
             else {
                 prefetch();
             }
-
-            // Change value without re-rendering
-            value.value = inputValue;
         }
         else {
-            if (response.data.length) {
-                // setTimeout(() => {
-                //     if (response.data.length) {
-                //         setResponse({
-                //             data: []
-                //         })
-                //     }
-                // }, 100)
-                // setTimeout(() => {
-                //     if (response.data.length) {
-                //         setResponse({
-                //             data: []
-                //         })
-                //     }
-                // }, 200)
-                // setTimeout(() => {
-                //     if (response.data.length) {
-                //         setResponse({
-                //             data: []
-                //         })
-                //     }
-                // }, 500)
-            }
+            setResponse({
+                data: []
+            })
         }
+
+        // Change value without re-rendering
+        value.value = inputValue;
     }
 
     const mapPreviewToHtml = () => {
