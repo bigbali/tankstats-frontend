@@ -1,4 +1,9 @@
 const initialState = {
+    statistics: {
+        searchType: "player",
+        server: "EU",
+        value: ""
+    },
     isLoading: true,
     status: "OK",
     headerForm: {

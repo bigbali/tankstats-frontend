@@ -29,27 +29,36 @@ export const setStatus = (statusActionType) => {
     }
 }
 
-export const headerFormSelectType = (type) => {
+export const statisticsSearchSelectType = (type) => {
     return {
-        type: actions.HEADER_FORM_SELECT_TYPE,
+        type: actions.STATISTICS_SEARCH_SELECT_TYPE,
         payload: {
             type
         }
     }
 }
 
-export const headerFormSelectServer = (server) => {
+export const statisticsSearchSelectServer = (server) => {
     return {
-        type: actions.HEADER_FORM_SELECT_SERVER,
+        type: actions.STATISTICS_SEARCH_SELECT_SERVER,
         payload: {
             server
         }
     }
 }
 
-export const headerFormSetId = (id) => {
+export const statisticsSearchSetName = (name) => {
     return {
-        type: actions.HEADER_FORM_SELECT_SERVER,
+        type: actions.STATISTICS_SEARCH_SET_NAME,
+        payload: {
+            name
+        }
+    }
+}
+
+export const statisticsSearchSetId = (id) => {
+    return {
+        type: actions.STATISTICS_SEARCH_SET_ID,
         payload: {
             id
         }

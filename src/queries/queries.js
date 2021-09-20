@@ -3,6 +3,18 @@ export const APP_ID = "62da3ef417f70e5ffeb44cf6fa339e1e";
 export const APP_ID_PARAM = "?application_id=62da3ef417f70e5ffeb44cf6fa339e1e";
 export const API_PATH = "https://api.worldoftanks";
 
+export const getApiPath = (server) => {
+    return `${API_PATH}${getServerDomain(server)}/`
+}
+
+export const getIdParam = (searchType, id) => {
+    if (searchType === "player"){
+        return `&account_id=${id}`
+    }
+    else if (searchType === "clan"){
+        return `&clan_id=${id}`
+    }
+}
 
 export const getUrlSearchType = (type) => {
     if (type === "player") {
@@ -17,14 +29,15 @@ export const getUrlSearchType = (type) => {
 }
 
 export const getServerDomain = (server) => {
+    // Making it lower case allows for both upper and lower case letters
     switch (server){
-        case "EU":
+        case "EU".toLowerCase():
             return ".eu"
-        case "NA":
+        case "NA".toLowerCase():
             return ".com"
-        case "RU":
+        case "RU".toLowerCase():
             return ".ru"
-        case "SEA":
+        case "SEA".toLowerCase():
             return ".sea"
         default:
             return ".eu"
@@ -49,30 +62,83 @@ export const getPrefetchUrl = (
     return url.join("")
 }
 
-// export const getQueryString = (
-//     name,
-//     server,
-//     type,
-// ) => {
-//     return `${apiPath}${server}/wot/${convertSearchType(type)}/list/${appIdParam}&search=${name}&limit=10`
-// }
 
+export const getStatisticsUrl = (
+    id,
+    server,
+    type
+    ) => {
+        // "https://api.worldoftanks.eu/wot/account/info/?application_id=62da3ef417f70e5ffeb44cf6fa339e1e&account_id=567856644"
+        // "https://api.worldoftanks.eu/wot/clans/info/?application_id=82aa817b24114a497711f9d052a1bdeb&clan_id=333"
+        let url = [
+            `${API_PATH}${getServerDomain(server)}/`,
+            `${GAME_ID}/`,
+            `${getUrlSearchType(type)}/`,
+            "info/",
+            `${APP_ID_PARAM}`,
+            `${getIdParam(type, id)}`,
+        ]
+        
+        return url.join("")
+}
+    
+export const getPlayerStatisticsUrl = (
+    server,
+    id
+    ) => {
+        // "https://api.worldoftanks.eu/wot/account/info/?application_id=62da3ef417f70e5ffeb44cf6fa339e1e&account_id=567856644"
+        // "https://api.worldoftanks.eu/wot/clans/info/?application_id=82aa817b24114a497711f9d052a1bdeb&clan_id=333"
+        let url = [
+            `${getApiPath(server)}`,
+            `${GAME_ID}/`,
+            "account/",
+            "info/",
+            `${APP_ID_PARAM}`,
+            `&account_id=${id}`,
+        ]
+        
+        return url.join("")
+}
+    
+export const getClanPrefetchUrl = (
+    server,
+    id
+) => {
+    let url = [
+        `${API_PATH}${getServerDomain(server)}/`,
+        `${GAME_ID}/`,
+        "clan/",
+        "info/",
+        `${APP_ID_PARAM}`,
+        `&clan_id=${id}`,
 
-// export const fetchHeaderSearchFormPreview = async (
-//     name,
-//     server,
-//     type
-// ) => {
-//     const result = await fetch(
-//         `https://api.worldoftanks.${server}/
-//             wot/
-//             ${convertSearchType(type)}/
-//             list/
-//             ${appIdParam}
-//             &search=${name}
-//             &limit=10`
-//     )
-//     //
+    ]
 
-//     return result
-// }
+    return url.join("")
+}
+
+export const getClanBadgeUrl = (
+    server,
+    playerId
+) => {
+    let url = [
+        `${API_PATH}${getServerDomain(server)}/`,
+        `${GAME_ID}/`,
+        "clans/",
+        "accountinfo/",
+        `${APP_ID_PARAM}`,
+        `&account_id=${playerId}`,
+        "&fields=",
+        "joined_at,",
+        "role,",
+        "clan.name,",
+        "clan.color,",
+        "clan.tag,",
+        "clan.emblems.x195,",
+        "clan.clan_id,",
+        "account_name"
+    ]
+
+    console.log(url.join(""))
+    return url.join("")
+}

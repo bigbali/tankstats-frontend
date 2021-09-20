@@ -1,16 +1,21 @@
 import React from 'react';
 import { useState } from 'react';
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { getPrefetchUrl } from '../../queries/queries';
+import actions from '../../redux/actions';
 import InputDropdown from '../InputDropdown/InputDropdown.component';
 import StatisticsSearchField from '../StatisticsSearchField/StatisticsSearchField.component';
 import './HeaderSearchForm.style.scss';
 
 const searchTypes = ["player", "clan"];
-const serverOptions = ["EU", "NA", "RU"];
+const serverOptions = ["eu", "na", "ru"];
 
-const HeaderSearchForm = () => {
+const HeaderSearchForm = (props) => {
     const [type, setType] = useState(searchTypes[0]);
     const [server, setServer] = useState(serverOptions[0]);
-    const [id, setId] = useState(null);
+
+    const history = useHistory();
 
     const handleTypeChange = (newType) => {
         setType(newType);
@@ -20,23 +25,47 @@ const HeaderSearchForm = () => {
         setServer(newServer);
     }
 
-    const handleIdChange = (newId) => {
-        setId(newId);
-    }
+    const handleSubmit = (value) => {
+        fetch(getPrefetchUrl(value, server, type))
+            .then(response => response.json())
+            .then(data => {
+                props.selectSearchType(type);
+                props.selectServer(server);
 
-    const handleSubmit = (id) => {
-        // fetch(`https://api.worldoftanks.eu/wot/account/list/?application_id=62da3ef417f70e5ffeb44cf6fa339e1e&search=${id}&limit=10`)
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log(JSON.stringify(data));
-        //     })
+                // If player/clan is not found
+                if (data.data.length === 0) {
+                    history.push(
+                        "/statistics/"
+                        + `${server}/`
+                        + `${type}/`
+                        + `${value}`);
+                }
+                else {
+                    if (type === "player") {
+                        history.push(
+                            "/statistics/"
+                            + `${server}/`
+                            + `${type}/`
+                            + `${data.data[0].account_id}`
+                            + `-${data.data[0].nickname}`);
+                    }
+                    else {
+                        history.push(
+                            "/statistics/"
+                            + `${server}/`
+                            + `${type}/`
+                            + `${data.data[0].clan_id}`
+                            + `-${data.data[0].tag}`);
+                    }
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     return (
-        <form
-            className="header-search-form"
-            action=""
-            method="GET">
+        <form className="header-search-form">
             <InputDropdown
                 options={searchTypes}
                 onSelect={handleTypeChange}
@@ -44,7 +73,8 @@ const HeaderSearchForm = () => {
             <InputDropdown
                 options={serverOptions}
                 onSelect={handleServerChange}
-                value={server} />
+                value={server}
+                uppercase={true} />
             <StatisticsSearchField
                 placeholder={`Search for ${type}`}
                 onSubmit={handleSubmit}
@@ -56,5 +86,14 @@ const HeaderSearchForm = () => {
     )
 }
 
-export default HeaderSearchForm
+const mapDispatchToProps = () => {
+    return {
+        selectSearchType: actions.statisticsSearchSelectType,
+        selectServer: actions.statisticsSearchSelectServer,
+        setName: actions.statisticsSearchSetName,
+        setId: actions.statisticsSearchSetId
+    }
+}
+
+export default connect(null, mapDispatchToProps())(HeaderSearchForm)
 

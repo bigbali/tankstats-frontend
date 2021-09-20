@@ -5,7 +5,7 @@ import Chevron from '../../media/svg/chevron.svg';
 import actions from '../../redux/actions';
 import './InputDropdown.style.scss';
 
-const InputDropdown = ({ options, value, onSelect }) => {
+const InputDropdown = ({ options, value, onSelect, uppercase }) => {
     const [isExpanded, setExpanded] = useState(false);
 
     const mapOptionsToHtml = () => {
@@ -26,6 +26,7 @@ const InputDropdown = ({ options, value, onSelect }) => {
 
     return (
         <div className={`input-dropdown 
+            ${uppercase ? "uppercase" : ""}
             ${isExpanded ? "expanded" : ""}`}>
             <div
                 className="input-dropdown-visible"

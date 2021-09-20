@@ -13,3 +13,8 @@ export const HEADER_FORM_SELECT_TYPE   = "header_form/select_type";
 export const HEADER_FORM_SELECT_SERVER = "header_form/select_server";
 export const HEADER_FORM_SET_ID        = "header_form/select_id";
 
+export const STATISTICS_SEARCH_SELECT_TYPE   = "statistics_search/select_type";
+export const STATISTICS_SEARCH_SELECT_SERVER = "statistics_search/select_server";
+export const STATISTICS_SEARCH_SET_NAME      = "statistics_search/set_name";
+export const STATISTICS_SEARCH_SET_ID        = "statistics_search/set_id";
+

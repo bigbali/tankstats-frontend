@@ -3,12 +3,11 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import SearchIcon from '../../media/svg/search-icon.svg';
 import { getPrefetchUrl } from '../../queries/queries';
-import './StatisticsSearchField.style.scss';
 import usePrevious from '../../util/usePrevious';
+import './StatisticsSearchField.style.scss';
 
-// TODO: input str cannot contain special characters, e.g.: "é, á"
 // TODO: work around 24 char input limit
-// TODO: no matter what, when request is finished it changes 'response'
+// TODO: refactor
 
 const StatisticsSearchField = ({
     placeholder,
@@ -23,29 +22,25 @@ const StatisticsSearchField = ({
         data: []
     });
 
+    // Hide prefetch window (no data => no window)
+    const resetResponse = () => {
+        setResponse({ data: [] })
+    }
     const previousSearchType = usePrevious(searchType);
+
+    // When we change searchType or server, don't render until next update
     const shouldWaitForUpdate = previousSearchType === searchType;
     const minRequestLength = searchType
         === "player"
         ? 3
         : 1;
 
-    //let previousValue = usePrevious(value);
+    let inputField;
 
     // Don't keep showing old data
     useEffect(() => {
-        setResponse({ data: [] })
-    }, [searchType]);
-
-    useEffect(() => {
-        setResponse({ data: [] })
-    }, [server]);
-
-    // useEffect(() => {
-    //     if (value.value.length < minRequestLength && response.data.length !== 0) {
-    //         setResponse({ data: [] })
-    //     }
-    // }, [response]);
+        resetResponse();
+    }, [searchType, server]);
 
     const handleOnChange = (event) => {
         const inputValue = event.target.value;
@@ -88,20 +83,15 @@ const StatisticsSearchField = ({
                 })
             }
 
+            prefetch();
+
             // Detect if value length is decreasing
             if (inputValue.length < value.value.length) {
-                console.log("going down yo")
-                prefetch();
 
-            }
-            else {
-                prefetch();
             }
         }
         else {
-            setResponse({
-                data: []
-            })
+            resetResponse();
         }
 
         // Change value without re-rendering
@@ -115,6 +105,10 @@ const StatisticsSearchField = ({
                     <li
                         className="statistics-search-field-preview-option"
                         key={player.nickname}
+                        onClick={() => {
+                            inputField.value = player.nickname;
+                            resetResponse();
+                        }}
                     >
                         {player.nickname}
                     </li>
@@ -128,6 +122,11 @@ const StatisticsSearchField = ({
                     <li
                         className="statistics-search-field-preview-option"
                         key={clan.name}
+                        onClick={() => {
+                            inputField.value = clan.tag;
+                            resetResponse();
+                        }}
+
                     >
                         <span
                             className="clan-tag"
@@ -157,14 +156,26 @@ const StatisticsSearchField = ({
                 className="statistics-search-field-input"
                 type={type}
                 placeholder={placeholder}
+                ref={thisInputField => inputField = thisInputField}
                 onChange={(e) => {
                     handleOnChange(e);
                 }} />
             <button
                 className="statistics-search-field-submit"
                 onClick={(e) => {
-                    e.preventDefault()
-                    onSubmit(value)
+                    e.preventDefault();
+
+                    if (inputField.value.length <= minRequestLength) {
+                        setMessage({
+                            message: `${searchType} name must be longer than `
+                                + `${minRequestLength} character`
+                                + `${minRequestLength > 1 ? "s" : ""}!`
+                        })
+                    }
+                    else {
+                        resetResponse();
+                        onSubmit(inputField.value);
+                    }
                 }}>
                 <img src={SearchIcon} alt="Search" />
             </button>
@@ -175,13 +186,16 @@ const StatisticsSearchField = ({
                         <span className="error-title">
                             Error:
                         </span>
-                        {message.message}
+                        <span className="error-body">
+                            {message.message}
+                        </span>
                     </div>
                     :
                     <ul>
                         {shouldWaitForUpdate ?
                             mapPreviewToHtml()
-                            : <span>Hello</span>}
+                            : null
+                        }
                     </ul>}
             </div>
         </div>

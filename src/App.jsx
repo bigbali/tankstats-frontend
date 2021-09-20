@@ -12,15 +12,18 @@ function App() {
             <Switch>
                 <Route exact path="/"
                     component={HomePage} />
-                <Route exact path="/statistics/:type/:id"
+                <Route exact path="/statistics/"
+                    component={StatisticsPage} />
+                <Route exact path="/statistics/:server/:searchType/:id-:name"
                     component={StatisticsPage} />
                 <Route exact path="/maps/:id"
                     component={MapsPage} />
 
                 {/* Catch 404 */}
-                {/* <Route>
-                        <ErrorPage status={status.STATUS_NOT_FOUND} />
-                    </Route> */}
+                <Route>
+                    {/* <ErrorPage status={status.STATUS_NOT_FOUND} /> */}
+                    <h1>404</h1>
+                </Route>
             </Switch>
         </Router>
     );
