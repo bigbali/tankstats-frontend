@@ -1,7 +1,42 @@
-.clan-badge {}
+.clan-badge {
+    display: flex;
+    flex-direction: column;
 
-.clan-badge-emblem {
+    .clan-badge-player-name {
+        font-size: 2.25rem;
+        font-weight: 500;
+        margin-bottom: 0.8rem;
+    }
 
-    width: 5rem;
-    height: 5rem;
+    .clan-badge-main {
+        display: flex;
+
+        .clan-badge-emblem {
+            width: 5rem;
+            height: 5rem;
+        }
+
+        .clan-badge-aside {
+            display: flex;
+            flex-direction: column;
+            margin-left: 1rem;
+
+            .clan-badge-clan-tag,
+            .clan-badge-clan-role {
+                font-size: 2rem;
+                text-transform: capitalize;
+            }
+
+            .clan-badge-clan-tag {
+                font-weight: 500;
+                font-family: "Roboto Mono";
+            }
+        }
+    }
+
+    .joined-date {
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-top: 0.8rem;
+    }
 }
