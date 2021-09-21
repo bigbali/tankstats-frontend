@@ -69,12 +69,13 @@ const HeaderSearchForm = (props) => {
             <InputDropdown
                 options={searchTypes}
                 onSelect={handleTypeChange}
-                value={type} />
+                value={type}
+                letterCasing="capitalize-first-letter" />
             <InputDropdown
                 options={serverOptions}
                 onSelect={handleServerChange}
                 value={server}
-                uppercase={true} />
+                letterCasing="uppercase" />
             <StatisticsSearchField
                 placeholder={`Search for ${type}`}
                 onSubmit={handleSubmit}

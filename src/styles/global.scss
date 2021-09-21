@@ -38,6 +38,28 @@ a {
     text-decoration: none;
 }
 
+.lowercase {
+    text-transform: lowercase;
+}
+
 .uppercase {
     text-transform: uppercase;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.capitalize-first-letter {
+    &::first-letter {
+        text-transform: capitalize;
+    }
+}
+
+.border-top {
+    border-top: 1px solid var(--color-light-gray);
+}
+
+.border-bottom {
+    border-bottom: 1px solid var(--color-light-gray);
 }

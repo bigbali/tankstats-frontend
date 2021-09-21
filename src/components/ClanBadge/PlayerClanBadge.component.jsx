@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { getClanBadgeUrl } from '../../queries/queries';
 import getClanPosition from '../../util/getClanPosition';
 import './PlayerClanBadge.style.scss';
+import { NavLink } from 'react-router-dom';
 
 const PlayerClanBadge = ({
     server,
-    playerId
+    playerId,
+    fallbackName
 }) => {
-    const [clanData, setClanData] = useState(null);
+    const [data, setdata] = useState(null);
 
     const getDate = (epoch) => {
-        const rawDate = new Date(clanData.joined_at * 1000);
+        const rawDate = new Date(data.joined_at * 1000);
 
         const year = rawDate.getFullYear().toString();
         let month = rawDate.getMonth().toString();
@@ -31,44 +33,52 @@ const PlayerClanBadge = ({
         fetch(getClanBadgeUrl(server, playerId))
             .then(response => response.json())
             .then(data => {
-                setClanData(data.data[playerId]);
+                setdata(data.data[playerId]);
             })
             .catch(error => {
                 console.log("we got an error")
             })
     }, [server, playerId])
 
-    if (clanData) {
+    if (data) {
         return (
-            <div className="clan-badge">
-                <span className="clan-badge-player-name">
-                    {clanData.account_name}
-                </span>
-                <div className="clan-badge-main">
-                    <img
-                        className="clan-badge-emblem"
-                        src={clanData.clan.emblems.x195.portal}
-                        alt="Clan emblem"
-                    />
-                    <div className="clan-badge-aside">
-                        <span className="clan-badge-clan-tag"
-                            style={{ color: clanData.clan.color }}>
-                            [{clanData.clan.tag}]
-                        </span>
-                        <span className="clan-badge-clan-role">
-                            {getClanPosition(clanData.role)}
-                        </span>
+            <NavLink to={`/statistics/${server}/clan/${data.clan.clan_id}-${data.clan.tag}`}
+                className="clan-badge-wrapper">
+                <div className="clan-badge">
+                    <span className="clan-badge-player-name">
+                        {data.account_name}
+                    </span>
+                    <div className="clan-badge-main">
+                        <img
+                            className="clan-badge-emblem"
+                            src={data.clan.emblems.x195.portal}
+                            alt="Clan emblem"
+                        />
+                        <div className="clan-badge-aside">
+                            <span className="clan-badge-clan-tag"
+                                style={{ color: data.clan.color }}>
+                                [{data.clan.tag}]
+                            </span>
+                            <span className="clan-badge-clan-role">
+                                {getClanPosition(data.role)}
+                            </span>
+                        </div>
                     </div>
+                    <span className="joined-date">
+                        Joined: {getDate(data.joined_at)}
+                    </span>
                 </div>
-                <span className="joined-date">
-                    Joined: {getDate(clanData.joined_at)}
-                </span>
-            </div>
+            </NavLink>
         )
     }
-    else {
-        return null
-    }
+
+    return (
+        <div className="clan-badge">
+            <span className="clan-badge-player-name">
+                {fallbackName}
+            </span>
+        </div>
+    )
 }
 
 export default PlayerClanBadge

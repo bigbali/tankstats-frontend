@@ -84,10 +84,19 @@ export const getStatisticsUrl = (
     
 export const getPlayerStatisticsUrl = (
     server,
-    id
+    id,
+    battleType
     ) => {
-        // "https://api.worldoftanks.eu/wot/account/info/?application_id=62da3ef417f70e5ffeb44cf6fa339e1e&account_id=567856644"
-        // "https://api.worldoftanks.eu/wot/clans/info/?application_id=82aa817b24114a497711f9d052a1bdeb&clan_id=333"
+        const getBattleTypeSpecific = () => {
+            if (battleType === "random") {
+                return "&fields=statistics.random&extra=statistics.random"
+            }
+            if (battleType === "cw-10") {
+                return "&fields=statistics.globalmap_absolute&extra=statistics.globalmap_absolute"
+            }
+
+            return ""
+        }
         let url = [
             `${getApiPath(server)}`,
             `${GAME_ID}/`,
@@ -95,6 +104,7 @@ export const getPlayerStatisticsUrl = (
             "info/",
             `${APP_ID_PARAM}`,
             `&account_id=${id}`,
+            `${getBattleTypeSpecific()}`
         ]
         
         return url.join("")

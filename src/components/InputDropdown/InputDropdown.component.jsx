@@ -1,24 +1,32 @@
 import React from 'react';
 import { useState } from 'react';
-import { connect } from 'react-redux';
 import Chevron from '../../media/svg/chevron.svg';
-import actions from '../../redux/actions';
 import './InputDropdown.style.scss';
 
-const InputDropdown = ({ options, value, onSelect, uppercase }) => {
+const InputDropdown = ({ options, value, onSelect, letterCasing, displayTransform }) => {
     const [isExpanded, setExpanded] = useState(false);
 
     const mapOptionsToHtml = () => {
         return options.map(option => {
             return (
                 <li key={option}
-                    className={`input-dropdown-option 
-                        ${value === option ? "selected" : ""}`}
+                    className={`input-dropdown-option
+                        ${letterCasing ===
+                            "capitalize-first-letter"
+                            ? letterCasing
+                            : ""} 
+                        ${value ===
+                            option
+                            ? "selected"
+                            : ""}`}
                     onClick={() => {
-                        onSelect(option)
+                        onSelect(option);
                         setExpanded(false);
                     }}>
-                    {option}
+                    {displayTransform
+                        ? displayTransform(option)
+                        : option
+                    }
                 </li>
             )
         })
@@ -26,14 +34,21 @@ const InputDropdown = ({ options, value, onSelect, uppercase }) => {
 
     return (
         <div className={`input-dropdown 
-            ${uppercase ? "uppercase" : ""}
-            ${isExpanded ? "expanded" : ""}`}>
+            ${letterCasing}
+            ${isExpanded
+                ? "expanded"
+                : ""}`}>
             <div
                 className="input-dropdown-visible"
                 onClick={() => {
                     setExpanded(!isExpanded);
                 }}>
-                <span className="input-dropdown-selected">
+                <span className={`input-dropdown-selected
+                    ${letterCasing ===
+                        "capitalize-first-letter"
+                        ? letterCasing
+                        : ""} 
+                    `}>
                     {value}
                 </span>
                 <img className="chevron"
