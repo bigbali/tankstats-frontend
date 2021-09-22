@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getPlayerStatisticsUrl, getStatisticsUrl } from '../../../queries/queries';
 import PlayerClanBadge from '../../../components/ClanBadge';
 import BattleTypeSelector from '../../../components/BattleTypeSelector';
+import PlayerStatisticsField from '../../../components/PlayerStatisticsField';
 import './PlayerStatisticsPage.style.scss';
 import BATTLE_TYPES from '../../../globals/battleTypes';
 
@@ -42,7 +43,10 @@ const PlayerStatisticsPage = ({
                         }}
                     />
                 </div>
-                {JSON.stringify(data)}
+                <div className="player-statistics">
+                    <PlayerStatisticsField data={data} />
+                </div>
+                {/* {JSON.stringify(data)} */}
             </>
         )
     }
