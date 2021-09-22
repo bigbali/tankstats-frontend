@@ -1,5 +1,21 @@
 .battle-type-selector {
+    display: flex;
+    align-items: center;
+    //position: relative;
+
+    .battle-type-icon {
+        //position: absolute;
+        width: 5rem;
+        height: 5rem;
+        margin-right: 2rem;
+
+    }
+
     .input-dropdown {
         min-width: 15rem;
+    }
+
+    .input-wrapper {
+        height: fit-content;
     }
 }
