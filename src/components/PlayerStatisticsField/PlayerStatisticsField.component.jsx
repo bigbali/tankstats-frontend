@@ -1,4 +1,5 @@
 import React from 'react';
+import TableCell from '../TableCell';
 import './PlayerStatisticsField.style.scss';
 
 const PlayerStatisticsField = ({ data }) => {
@@ -18,7 +19,7 @@ const PlayerStatisticsField = ({ data }) => {
             <tbody>
                 <tr>
                     <td>Battles</td>
-                    <td>{data.statistics.random.battles}</td>
+                    <TableCell>{data.statistics.random.battles}</TableCell>
                     <td></td>
                 </tr>
                 <tr>

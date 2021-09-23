@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Header from './components/Header';
 import HomePage from './routes/HomePage';
 import StatisticsPage from './routes/StatisticsPage';
-import MapsPage from './routes/MapsPage';
+import MapPage from './routes/MapPage';
+import InteractiveMapPage from './routes/InteractiveMapPage';
 
 
 function App() {
@@ -16,8 +17,14 @@ function App() {
                     component={StatisticsPage} />
                 <Route exact path="/statistics/:server/:searchType/:id-:name"
                     component={StatisticsPage} />
+                <Route exact path="/maps/"
+                    component={MapPage} />
                 <Route exact path="/maps/:id"
-                    component={MapsPage} />
+                    component={MapPage} />
+                <Route exact path="/interactive-maps/"
+                    component={InteractiveMapPage} />
+                <Route exact path="/interactive-map/:id"
+                    component={InteractiveMapPage} />
 
                 {/* Catch 404 */}
                 <Route>
