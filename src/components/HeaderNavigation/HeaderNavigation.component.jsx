@@ -21,7 +21,6 @@ const HeaderNavigation = () => {
         <NavLink
             activeClassName="active"
             className="header-navigation-link"
-            exact
             to="/maps"
         >
             Maps

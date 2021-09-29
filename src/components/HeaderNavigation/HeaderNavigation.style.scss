@@ -4,13 +4,16 @@
 
 .header-navigation-link {
     display: inline-block;
+    height: 2rem;
+    line-height: 2rem;
     font-size: 1.5rem;
     font-weight: 500;
     margin-right: 2rem;
-    padding-left: 0.4rem;
-    padding-right: 0.4rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
     color: var(--color-main-foreground);
-    background-image: linear-gradient(var(--color-theme), var(--color-theme));
+    background-image: linear-gradient(var(--color-theme),
+            var(--color-theme));
     background-repeat: no-repeat;
     background-size: 100% 0;
     background-position: 0 100%;

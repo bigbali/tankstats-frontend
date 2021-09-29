@@ -68,8 +68,6 @@ export const getStatisticsUrl = (
     server,
     type
     ) => {
-        // "https://api.worldoftanks.eu/wot/account/info/?application_id=62da3ef417f70e5ffeb44cf6fa339e1e&account_id=567856644"
-        // "https://api.worldoftanks.eu/wot/clans/info/?application_id=82aa817b24114a497711f9d052a1bdeb&clan_id=333"
         let url = [
             `${API_PATH}${getServerDomain(server)}/`,
             `${GAME_ID}/`,

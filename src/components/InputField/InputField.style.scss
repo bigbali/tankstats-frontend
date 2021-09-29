@@ -1,0 +1,22 @@
+.input-field {
+    input {
+        width: 15rem;
+        height: 2rem;
+        border: none;
+        border-left: 0.25rem solid var(--color-main-foreground);
+        padding-left: 0.5rem;
+        font-size: 1.125rem;
+        font-weight: 500;
+        transition: border-left 0.1s, background-color 0.1s;
+
+        &:focus,
+        &:focus-visible {
+            border-left: 0.25rem solid var(--color-theme);
+            outline: none;
+        }
+
+        &:hover {
+            background-color: var(--color-hover-highlight);
+        }
+    }
+}

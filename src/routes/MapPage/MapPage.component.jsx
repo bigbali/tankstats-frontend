@@ -1,24 +1,10 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import MapDetailsPage from './MapDetailsPage';
 import MapIndexPage from './MapIndexPage';
 
 const MapPage = () => {
-    const [map, setMap] = useState(null)
     const urlParams = useParams();
     const { id } = urlParams;
-
-    useEffect(() => {
-        if (id) {
-            fetch(`http://www.localhost:8000/api/maps/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    setMap(data)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-        }
-    }, [id])
 
     if (!id) {
         return (
@@ -27,7 +13,7 @@ const MapPage = () => {
     }
 
     return (
-        <h1>{JSON.stringify(map)}</h1>
+        <MapDetailsPage id={id} />
     )
 }
 

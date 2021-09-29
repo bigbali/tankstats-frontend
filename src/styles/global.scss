@@ -2,14 +2,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@700&display=swap');
 
 :root {
-    --color-main-background: #{rgba(192, 211, 222, 0.2)};
-    --color-main-foreground: #{rgba(0, 0, 0, 0.75)};
-    --color-hover-highlight: #{rgba(177, 189, 197, 0.3)};
-    --color-light-gray: #{rgba(0, 0, 0, 0.5)};
-    --color-darker-light-gray: #{rgba(0, 0, 0, 0.6)};
-    --color-lighter-light-gray: #{rgba(0, 0, 0, 0.15)};
+    --color-main-background: #{rgb(242,246,248)};
+    --color-main-foreground: #{rgb(64,64,64)};
+    --color-hover-highlight: #{rgb(232,235,238)};
+    --color-light-gray: #{rgb(128,128,128)};
+    --color-darker-light-gray: #{rgb(102,102,102)};
+    --color-lighter-light-gray: #{rgb(231, 231, 231)};
     --color-white: #{white};
     --color-theme: #{#D10000};
+    --color-glass-1: #{rgba(14, 44, 61, 0.5)};
 }
 
 * {
@@ -36,6 +37,12 @@ code {
 
 a {
     text-decoration: none;
+
+    &.highlight-effect {
+        &:hover {
+            color: var(--color-theme) !important;
+        }
+    }
 }
 
 .lowercase {
@@ -62,4 +69,24 @@ a {
 
 .border-bottom {
     border-bottom: 1px solid var(--color-light-gray);
+}
+
+.outline {
+    outline: 0.1rem solid var(--color-theme);
+}
+
+.ml-1 {
+    margin-left: 1rem;
+}
+
+.ml-2 {
+    margin-left: 2rem;
+}
+
+.ml-3 {
+    margin-left: 3rem;
+}
+
+.ml-4 {
+    margin-left: 4rem;
 }

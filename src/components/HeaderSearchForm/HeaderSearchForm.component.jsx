@@ -1,9 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
-import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { getPrefetchUrl } from '../../queries/queries';
-import actions from '../../redux/actions';
 import InputDropdown from '../InputDropdown/InputDropdown.component';
 import StatisticsSearchField from '../StatisticsSearchField/StatisticsSearchField.component';
 import './HeaderSearchForm.style.scss';
@@ -29,9 +27,6 @@ const HeaderSearchForm = (props) => {
         fetch(getPrefetchUrl(value, server, type))
             .then(response => response.json())
             .then(data => {
-                props.selectSearchType(type);
-                props.selectServer(server);
-
                 // If player/clan is not found
                 if (data.data.length === 0) {
                     history.push(
@@ -70,11 +65,13 @@ const HeaderSearchForm = (props) => {
                 options={searchTypes}
                 onSelect={handleTypeChange}
                 value={type}
+                fixedWidth="6rem"
                 letterCasing="capitalize-first-letter" />
             <InputDropdown
                 options={serverOptions}
                 onSelect={handleServerChange}
                 value={server}
+                fixedWidth="4.5rem"
                 letterCasing="uppercase" />
             <StatisticsSearchField
                 placeholder={`Search for ${type}`}
@@ -87,14 +84,5 @@ const HeaderSearchForm = (props) => {
     )
 }
 
-const mapDispatchToProps = () => {
-    return {
-        selectSearchType: actions.statisticsSearchSelectType,
-        selectServer: actions.statisticsSearchSelectServer,
-        setName: actions.statisticsSearchSetName,
-        setId: actions.statisticsSearchSetId
-    }
-}
-
-export default connect(null, mapDispatchToProps())(HeaderSearchForm)
+export default HeaderSearchForm
 

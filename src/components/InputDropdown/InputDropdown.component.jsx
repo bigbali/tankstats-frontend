@@ -3,7 +3,15 @@ import { useState } from 'react';
 import Chevron from '../../media/svg/chevron.svg';
 import './InputDropdown.style.scss';
 
-const InputDropdown = ({ options, value, onSelect, letterCasing, displayTransform }) => {
+const InputDropdown = ({
+    options,
+    value,
+    onSelect,
+    letterCasing,
+    displayTransform,
+    fixedWidth,
+    className
+}) => {
     const [isExpanded, setExpanded] = useState(false);
 
     const mapOptionsToHtml = () => {
@@ -34,10 +42,23 @@ const InputDropdown = ({ options, value, onSelect, letterCasing, displayTransfor
 
     return (
         <div className={`input-dropdown 
-            ${letterCasing}
+            ${letterCasing
+                ? letterCasing
+                : ""}
+            ${className
+                ? className
+                : ""}
             ${isExpanded
                 ? "expanded"
-                : ""}`}>
+                : ""}
+            `}
+            style={
+                fixedWidth
+                    ? {
+                        width: fixedWidth
+                    }
+                    : null
+            }>
             <div
                 className="input-dropdown-visible"
                 onClick={() => {
@@ -55,7 +76,15 @@ const InputDropdown = ({ options, value, onSelect, letterCasing, displayTransfor
                     src={Chevron}
                     alt="Expand" />
             </div>
-            <ul className="input-dropdown-options">
+            <ul
+                className="input-dropdown-options"
+                style={
+                    fixedWidth
+                        ? {
+                            width: fixedWidth
+                        }
+                        : null
+                }>
                 {mapOptionsToHtml()}
             </ul>
         </div>

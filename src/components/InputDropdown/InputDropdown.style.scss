@@ -18,7 +18,7 @@
     }
 
     &:hover {
-        background-color: var(--color-lighter-light-gray);
+        background-color: var(--color-hover-highlight);
     }
 }
 
@@ -39,6 +39,8 @@
 }
 
 .input-dropdown-options {
+    position: absolute;
+    z-index: 99;
     margin-top: 0.5rem;
     padding: 0;
     background-color: var(--color-white);

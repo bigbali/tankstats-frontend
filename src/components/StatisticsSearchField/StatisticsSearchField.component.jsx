@@ -70,7 +70,7 @@ const StatisticsSearchField = ({
                     }
                 })
                 .catch((error) => {
-                    console.log("ouch")
+                    console.log(error)
                 })
         }
 
@@ -87,7 +87,7 @@ const StatisticsSearchField = ({
 
             // Detect if value length is decreasing
             if (inputValue.length < value.value.length) {
-
+                // # pass
             }
         }
         else {
