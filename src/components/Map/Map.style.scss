@@ -1,0 +1,186 @@
+.map-card {
+    position: relative;
+    transition: outline 0.1s;
+
+    .image-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            z-index: 3;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-image:
+                repeating-linear-gradient(var(--color-white) 0 1px, transparent 1px 100%),
+                repeating-linear-gradient(90deg, var(--color-white) 0 1px, transparent 1px 100%);
+            background-size: 10% 10%;
+            opacity: 0;
+            transition: opacity 0.1s;
+        }
+
+        .size {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            padding-bottom: 0.5rem;
+            padding-right: 0.6rem;
+            color: var(--color-white);
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px black;
+            opacity: 0;
+            transition: opacity 0.1s;
+
+            &.show {
+                opacity: 1;
+            }
+        }
+    }
+
+    &.show-grid {
+        .image-wrapper {
+            margin-left: 1.5rem;
+            margin-top: 1.5rem;
+            width: calc(100% - 1.5rem);
+            height: calc(100% - 1.5rem);
+
+            &::after {
+                opacity: 1;
+            }
+        }
+
+        .grid {
+            opacity: 1;
+        }
+
+        &::before {
+            display: inline-flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            width: fit-content;
+            max-width: 50%;
+            left: 1.5rem;
+            top: 1.5rem;
+            padding: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+    }
+
+    .grid {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        opacity: 0;
+        transition: opacity 0.1s;
+
+        ul {
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            color: var(--color-white);
+            background-color: rgba(0, 0, 0, 0.5);
+
+            li {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+            }
+
+            &.vertical {
+                flex-direction: column;
+                width: 1.5rem;
+                height: calc(100% - 1.5rem);
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+                top: 1.5rem;
+            }
+
+            &.horizontal {
+                width: calc(100% - 1.5rem);
+                height: 1.5rem;
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+                left: 1.5rem;
+            }
+        }
+    }
+
+    &::before {
+        content: attr(name);
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        padding: 1rem;
+        backdrop-filter: blur(5px) saturate(50%);
+        background-color: var(--color-glass-1);
+        font-size: 2.25rem;
+        font-weight: 400;
+        color: var(--color-white);
+        opacity: 0;
+        transition: opacity 0.1s, color 0.1s;
+    }
+
+    &::after {
+        content: attr(name);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        z-index: 4;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        font-size: 2.25rem;
+        font-weight: 400;
+        color: var(--color-white);
+        backdrop-filter: blur(10px) saturate(50%);
+        background-color: var(--color-glass-1);
+        opacity: 0;
+        transition: opacity 0.1s;
+    }
+
+    &.show-name {
+        &::before {
+            opacity: 1;
+        }
+    }
+
+    &:hover {
+        outline: 0.2rem solid var(--color-theme);
+
+        &::after {
+            opacity: 1;
+        }
+
+        &.show-name {
+            &::before {
+                color: transparent;
+            }
+        }
+    }
+}

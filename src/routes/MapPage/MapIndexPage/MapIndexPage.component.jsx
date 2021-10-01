@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Checkbox from '../../../components/Checkbox';
 import InputDropdown from '../../../components/InputDropdown';
 import InputField from '../../../components/InputField';
+import Map from '../../../components/Map';
 import './MapIndexPage.style.scss';
 
 const mapSeasonOptions = [
@@ -19,7 +20,7 @@ const MapIndexPage = () => {
     const [showGrid, setShowGrid] = useState(false);
     const [showSize, setShowSize] = useState(true);
 
-    const getMaps = (suppliedMaps) => {
+    const getMaps = () => {
         let relevantMaps = maps.maps;
 
         if (filterSeason && filterSeason !== "all") {
@@ -40,60 +41,14 @@ const MapIndexPage = () => {
 
         return relevantMaps.map(map => {
             return (
-                <a
-                    key={map.name}
-                    className={`map-card 
-                        ${showName
-                            ? "show-name"
-                            : ""
-                        }
-                        ${showGrid
-                            ? "show-grid"
-                            : ""
-                        }`
-                    }
-                    href={`maps/${map.slug}`}
-                    name={map.name}>
-                    <div className="image-wrapper">
-                        <img
-                            src={map.map_standard}
-                            alt={map.name}
-                        />
-                        <span className={`size
-                            ${showSize
-                                ? "show"
-                                : ""
-                            }`}>
-                            {map.size} x {map.size}
-                        </span>
-                    </div>
-                    <div className="grid">
-                        <ul className="horizontal">
-                            <li>1</li>
-                            <li>2</li>
-                            <li>3</li>
-                            <li>4</li>
-                            <li>5</li>
-                            <li>6</li>
-                            <li>7</li>
-                            <li>8</li>
-                            <li>9</li>
-                            <li>0</li>
-                        </ul>
-                        <ul className="vertical">
-                            <li>A</li>
-                            <li>B</li>
-                            <li>C</li>
-                            <li>D</li>
-                            <li>E</li>
-                            <li>F</li>
-                            <li>G</li>
-                            <li>H</li>
-                            <li>J</li>
-                            <li>K</li>
-                        </ul>
-                    </div>
-                </a>
+                <Map
+                    key={map.slug}
+                    map={map}
+                    showName={showName}
+                    showGrid={showGrid}
+                    showSize={showSize}
+                    isAnchor={true}
+                />
             )
         })
     }

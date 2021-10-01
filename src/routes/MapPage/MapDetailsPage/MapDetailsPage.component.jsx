@@ -1,9 +1,29 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import DetailedMap from '../../../components/DetailedMap';
+import InputDropdown from '../../../components/InputDropdown';
+import Checkbox from '../../../components/Checkbox';
+import { mapTypes } from '../../../globals/maps';
 import './MapDetailsPage.style.scss';
 
+const transformToUserReadable = (mapType) => {
+    switch (mapType) {
+        case mapTypes[0]:
+            return "Standard"
+        case mapTypes[1]:
+            return "Height"
+        case mapTypes[2]:
+            return "Ground resistance"
+        default:
+            return "Unknown"
+    }
+}
+
 const MapDetailsPage = ({ id }) => {
-    const [map, setMap] = useState(null)
+    const [map, setMap] = useState(null);
+    const [mapType, setMapType] = useState(mapTypes[0]);
+    const [showGrid, setShowGrid] = useState(true);
+    const [showSize, setShowSize] = useState(false);
 
     useEffect(() => {
         fetch(`http://www.localhost:8000/api/maps/${id}`)
@@ -38,11 +58,37 @@ const MapDetailsPage = ({ id }) => {
                         <h1>{map.name}</h1>
                         <p>{map.description}</p>
                     </div>
+                    <div className="options-bar">
+                        <InputDropdown
+                            className="outline"
+                            fixedWidth="13rem"
+                            options={mapTypes}
+                            value={mapType}
+                            onSelect={setMapType}
+                            letterCasing="capitalize"
+                            displayTransform={transformToUserReadable}
+                        />
+                        <Checkbox
+                            className="outline"
+                            value={showGrid}
+                            label="Show grid"
+                            name="show-grid"
+                            onChange={setShowGrid}
+                        />
+                        <Checkbox
+                            className="outline"
+                            value={showSize}
+                            label="Show size"
+                            name="show-size"
+                            onChange={setShowSize}
+                        />
+                    </div>
                     <div className="map-wrapper">
-                        <img
-                            className="map"
-                            src={map.map_standard}
-                            alt=""
+                        <DetailedMap
+                            map={map}
+                            mapType={mapType}
+                            showGrid={showGrid}
+                            showSize={showSize}
                         />
                     </div>
                 </div>

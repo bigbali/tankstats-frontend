@@ -70,7 +70,10 @@ const InputDropdown = ({
                         ? letterCasing
                         : ""} 
                     `}>
-                    {value}
+                    {displayTransform
+                        ? displayTransform(value)
+                        : value
+                    }
                 </span>
                 <img className="chevron"
                     src={Chevron}
