@@ -3,7 +3,7 @@ import Header from './components/Header';
 import HomePage from './routes/HomePage';
 import StatisticsPage from './routes/StatisticsPage';
 import MapPage from './routes/MapPage';
-import InteractiveMapPage from './routes/InteractiveMapPage';
+import StrategicMapPage from './routes/StrategicMapPage';
 
 
 function App() {
@@ -21,10 +21,10 @@ function App() {
                     component={MapPage} />
                 <Route exact path="/maps/:id"
                     component={MapPage} />
-                <Route exact path="/interactive-maps/"
-                    component={InteractiveMapPage} />
-                <Route exact path="/interactive-map/:id"
-                    component={InteractiveMapPage} />
+                <Route exact path="/strategic-maps/"
+                    component={StrategicMapPage} />
+                <Route exact path="/strategic-maps/:id"
+                    component={StrategicMapPage} />
 
                 {/* Catch 404 */}
                 <Route>

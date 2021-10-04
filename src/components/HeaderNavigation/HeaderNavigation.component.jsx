@@ -25,6 +25,13 @@ const HeaderNavigation = () => {
         >
             Maps
         </NavLink>
+        <NavLink
+            activeClassName="active"
+            className="header-navigation-link"
+            to="/strategic-maps"
+        >
+            Strategic Maps
+        </NavLink>
     </div>
 }
 

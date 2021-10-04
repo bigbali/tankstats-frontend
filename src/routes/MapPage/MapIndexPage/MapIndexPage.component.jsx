@@ -60,7 +60,7 @@ const MapIndexPage = () => {
                 setMaps(data)
             })
             .catch(error => {
-                console.log(error)
+
             })
     }, [])
 
@@ -115,7 +115,11 @@ const MapIndexPage = () => {
         )
     }
 
-    return null
+    return (
+        <h1>
+            Failed to fetch maps from database.
+        </h1>
+    )
 }
 
 export default MapIndexPage
