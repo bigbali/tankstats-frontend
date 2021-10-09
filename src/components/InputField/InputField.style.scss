@@ -19,4 +19,9 @@
             background-color: var(--color-hover-highlight);
         }
     }
+
+    label {
+        display: block;
+        margin-bottom: 0.25rem;
+    }
 }

@@ -1,0 +1,18 @@
+.strategic-map-create {
+    display: none;
+    position: absolute;
+    height: 50%;
+    width: 50%;
+    inset: 0;
+    margin: auto;
+    padding: 2rem;
+    background-color: rgb(214, 214, 214);
+
+    &.expanded {
+        display: block;
+    }
+
+    .input-field {
+        margin-top: 1rem;
+    }
+}

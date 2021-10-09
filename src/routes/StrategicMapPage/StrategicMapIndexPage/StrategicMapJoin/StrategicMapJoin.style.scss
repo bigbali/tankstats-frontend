@@ -1,4 +1,5 @@
 .strategic-map-join {
+    display: none;
     position: absolute;
     background-color: yellow;
     width: 30rem;
@@ -7,6 +8,10 @@
     left: 0;
     right: 0;
     padding: 5rem;
+
+    &.expanded {
+        display: block;
+    }
 
     &>* {
         margin-bottom: 0;

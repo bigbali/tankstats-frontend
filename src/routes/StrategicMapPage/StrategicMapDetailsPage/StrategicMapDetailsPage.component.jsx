@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import db from '../../../util/db';
 import axe from 'gun/axe';
+import SEA from 'gun/sea';
 
 window.db = db;
+//let SEA = Gun.SEA()
 
 const StrategicMapDetailsPage = ({ id }) => {
     // SET TO NULL
@@ -73,7 +75,7 @@ const StrategicMapDetailsPage = ({ id }) => {
             )
         }
         return (
-            <div onClick={() => {
+            <div onClick={async () => {
                 const newStratMap = {
                     id: id,
                     name: "test name",
@@ -81,6 +83,29 @@ const StrategicMapDetailsPage = ({ id }) => {
                     owner: "567856644",
                     passwordProtected: true
                 }
+
+                // pair
+                // encrypt
+                // decrypt
+
+                // let pair = await SEA.pair();
+                // let x = await SEA.encrypt(newStratMap, pair);
+                // var data = await SEA.sign(x, pair);
+                // var msg = await SEA.verify(data, pair.pub);
+                // var dec = await SEA.decrypt(msg, pair);
+                // console.log(pair)
+                // console.log(x)
+                // console.log(data)
+                // console.log(msg)
+                // console.log(dec)
+
+                let encdata = await SEA.encrypt(newStratMap, "thispassword")
+                let decdata = await SEA.decrypt(encdata, "thispassword")
+                let fakedecdata = await SEA.decrypt(encdata, "notthispassword")
+
+                console.log(encdata)
+                console.log(decdata)
+                console.log(fakedecdata)
 
                 db.get("stratMap").get(id).put(newStratMap, () => {
                     console.log(`%cPUT ${id}`, "background-color: blue; color: white; padding: 0.25rem")

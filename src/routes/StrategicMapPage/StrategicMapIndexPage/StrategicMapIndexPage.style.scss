@@ -1,0 +1,43 @@
+.strategic-map-index-page {
+    padding-top: 2rem;
+
+    h1,
+    h2,
+    h3,
+    p {
+        margin: 0;
+    }
+
+    h2 {
+        //margin-top: 1rem;
+        font-weight: 400;
+    }
+
+    h3 {
+        margin-top: 1rem;
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+
+    p {
+        max-width: 50%;
+        margin-top: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    ul {
+        margin-top: 0.5rem;
+        list-style: square;
+    }
+
+    .buttons {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        margin-top: 2rem;
+
+        .button {
+            margin-bottom: 1rem;
+        }
+    }
+}

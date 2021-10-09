@@ -4,18 +4,23 @@ import Button from '../../../../components/Button';
 import InputField from '../../../../components/InputField';
 import './StrategicMapJoin.style.scss';
 
-const StrategicMapJoin = () => {
+const StrategicMapJoin = ({
+    isExpanded
+}) => {
     const [mapId, setMapId] = useState("");
-    const [mapPassword, setMapPassword] = useState("");
-
     const history = useHistory()
 
+    // Redirect
     const join = () => {
         history.push(`${history.location.pathname}/${mapId}`)
     }
 
     return (
-        <div className="strategic-map-join">
+        <div className={`strategic-map-join 
+            ${isExpanded
+                ? "expanded"
+                : ""
+            }`}>
             <h2>
                 Join a Strategic Map
             </h2>
@@ -25,14 +30,6 @@ const StrategicMapJoin = () => {
                 placeholder="Unique ID of strategic map"
                 onChange={(value) => {
                     setMapId(value)
-                }}
-            />
-            <InputField
-                type="password"
-                value={mapPassword}
-                placeholder="Password"
-                onChange={(value) => {
-                    setMapPassword(value)
                 }}
             />
             <Button

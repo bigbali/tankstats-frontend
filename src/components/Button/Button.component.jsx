@@ -4,13 +4,18 @@ import './Button.style.scss';
 const Button = ({
     children,
     onClick,
-    isPrimary
+    isPrimary,
+    size
 }) => {
     return (
         <button
             className={`button 
                 ${isPrimary
                     ? "primary"
+                    : ""
+                }
+                ${size
+                    ? size
                     : ""
                 }`}
             onClick={onClick}>
