@@ -25,7 +25,7 @@ const StrategicMapDetailsPage = ({ id }) => {
     }, [id])
 
     useEffect(() => {
-        db.get("stratMap").map().on((value, gunid) => {
+        db.get("stratMap").get(id).on((value, gunid) => {
             console.log(`%cON ${gunid}: ${JSON.stringify(value)}`, "background-color: black; color: white; padding: 0.25rem")
 
             setData(previousData => ({

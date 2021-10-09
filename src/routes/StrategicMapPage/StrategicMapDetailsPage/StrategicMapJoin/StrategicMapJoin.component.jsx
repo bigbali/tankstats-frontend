@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Button from '../../../../components/Button';
 import InputField from '../../../../components/InputField';
 import './StrategicMapJoin.style.scss';
 
 const StrategicMapJoin = () => {
-    const [mapId, setMapId] = useState(null);
-    const [mapPassword, setMapPassword] = useState(null);
+    const [mapId, setMapId] = useState("");
+    const [mapPassword, setMapPassword] = useState("");
+
+    const history = useHistory()
+
+    const join = () => {
+        history.push(`${history.location.pathname}/${mapId}`)
+    }
 
     return (
         <div className="strategic-map-join">
@@ -29,7 +36,8 @@ const StrategicMapJoin = () => {
                 }}
             />
             <Button
-                isPrimary={true}>
+                isPrimary={true}
+                onClick={join}>
                 Join
             </Button>
         </div>
