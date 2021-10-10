@@ -16,7 +16,17 @@
         pointer-events: all;
     }
 
-    .input-field {
+    .input-field,
+    .text-field {
         margin-top: 1rem;
+    }
+
+    input,
+    textarea {
+        width: 40%;
+    }
+
+    textarea {
+        height: 5rem;
     }
 }

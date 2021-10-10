@@ -2,6 +2,7 @@ import React from 'react';
 import './InputField.style.scss';
 
 const InputField = ({
+    name,
     type,
     value,
     placeholder,

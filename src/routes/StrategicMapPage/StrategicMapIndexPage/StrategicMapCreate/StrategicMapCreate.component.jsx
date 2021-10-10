@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import InputField from '../../../../components/InputField';
 import StyleableCloseIconSVG from '../../../../components/StyleableCloseIconSVG';
+import TextField from '../../../../components/TextField';
 import './StrategicMapCreate.style.scss';
 
 const StrategicMapCreate = ({
@@ -32,10 +33,11 @@ const StrategicMapCreate = ({
                 />
                 {/*TODO: make textfield */}
                 {/*TODO: hover tooltip component */}
-                <InputField
+                <TextField
                     type="text"
                     label="Description"
                     placeholder="My strategic map"
+                    isResizable={false}
                     onChange={setDescription}
                 />
                 <InputField
