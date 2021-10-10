@@ -1,19 +1,23 @@
 .strategic-map-join {
-    display: none;
     position: absolute;
-    background-color: yellow;
-    width: 30rem;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
+    z-index: 2;
+    width: 50%;
+    height: 50%;
+    inset: 0;
+    margin: auto;
     padding: 5rem;
+    opacity: 0;
+    pointer-events: none;
+    background-color: var(--color-main-background);
+    transition: opacity 0.1s;
 
     &.expanded {
-        display: block;
+        opacity: 1;
+        pointer-events: all;
     }
 
-    &>* {
+    input,
+    button {
         margin-bottom: 0;
         margin-top: 1rem;
     }

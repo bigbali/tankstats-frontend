@@ -1,15 +1,19 @@
 .strategic-map-create {
-    display: none;
     position: absolute;
-    height: 50%;
-    width: 50%;
+    z-index: 2;
     inset: 0;
+    width: 50%;
+    height: 50%;
     margin: auto;
     padding: 2rem;
-    background-color: rgb(214, 214, 214);
+    background-color: var(--color-main-background);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s;
 
     &.expanded {
-        display: block;
+        opacity: 1;
+        pointer-events: all;
     }
 
     .input-field {

@@ -19,13 +19,13 @@ const StrategicMapIndexPage = () => {
             <h3>About Strategic Maps</h3>
             <p>
                 Create and realize strategies using our advanced strategic maps:
-                <ul>
-                    <li>Maps are updated in real time</li>
-                    <li>Built on decentralized (peer-to-peer) technology,
-                        which allows fast and efficient sharing of information</li>
-                    <li>Keep your strategies secret with high security encryption</li>
-                </ul>
             </p>
+            <ul>
+                <li>Maps are updated in real time</li>
+                <li>Built on decentralized (peer-to-peer) technology,
+                    which allows fast and efficient sharing of information</li>
+                <li>Keep your strategies secret with high security encryption</li>
+            </ul>
             <div className="buttons">
                 <Button
                     size="medium"
@@ -47,9 +47,11 @@ const StrategicMapIndexPage = () => {
             </div>
             <StrategicMapJoin
                 isExpanded={isJoinExpanded}
+                setIsExpanded={setIsJoinExpanded}
             />
             <StrategicMapCreate
                 isExpanded={isCreateExpanded}
+                setIsExpanded={setIsCreateExpanded}
             />
         </main>
     )

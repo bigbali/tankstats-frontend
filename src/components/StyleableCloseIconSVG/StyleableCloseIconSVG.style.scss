@@ -1,0 +1,18 @@
+.styleable-close-icon-svg {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 1.5rem;
+    cursor: pointer;
+
+    .close-icon {
+        fill: var(--color-main-foreground);
+        transition: fill 0.1s;
+    }
+
+    &:hover {
+        .close-icon {
+            fill: var(--color-theme);
+        }
+    }
+}

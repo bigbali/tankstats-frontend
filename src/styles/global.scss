@@ -91,3 +91,20 @@ a {
 .ml-4 {
     margin-left: 4rem;
 }
+
+.backdrop {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    top: 5rem;
+    background-color: var(--color-glass-1);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s;
+
+    &.expanded {
+        opacity: 1;
+        pointer-events: all;
+    }
+}
