@@ -30,4 +30,14 @@
         display: block;
         margin-bottom: 0.25rem;
     }
+
+    &.has-info {
+        textarea {
+            padding-right: 2rem;
+        }
+    }
+
+    .group {
+        position: relative;
+    }
 }

@@ -16,17 +16,24 @@
         pointer-events: all;
     }
 
+    .wrapper {
+        display: flex;
+        justify-content: space-between;
+
+        .left,
+        .right {
+            width: 45%;
+        }
+    }
+
     .input-field,
     .text-field {
         margin-top: 1rem;
-    }
+        width: 100%;
 
-    input,
-    textarea {
-        width: 40%;
-    }
-
-    textarea {
-        height: 5rem;
+        input,
+        textarea {
+            width: 100%;
+        }
     }
 }

@@ -24,4 +24,15 @@
         display: block;
         margin-bottom: 0.25rem;
     }
+
+    &.has-info {
+        input {
+            padding-right: 2rem;
+        }
+    }
+
+    .group {
+        position: relative;
+    }
+
 }

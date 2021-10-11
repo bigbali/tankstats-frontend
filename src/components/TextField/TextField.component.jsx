@@ -11,7 +11,8 @@ const TextField = ({
     isResizable,
     className,
     onChange,
-    children
+    children,
+    infoButton
 }) => {
     const _label = label
         ? <label>{label}</label>
@@ -19,26 +20,37 @@ const TextField = ({
 
     return (
         <div className={`text-field 
+            ${infoButton
+                ? "has-info"
+                : ""
+            }
             ${className
                 ? className
                 : ""
             }`}>
             {_label}
-            <textarea
-                className={`${isResizable
-                    ? "resizable"
-                    : ""
-                    }`}
-                name={`${name ? name : ""}`}
-                id={`${name ? name : ""}`}
-                rows={`${rows ? rows : ""}`}
-                cols={`${columns ? columns : ""}`}
-                onChange={(e) => {
-                    onChange(e.target.value)
-                }}
-            >
-                {children}
-            </textarea>
+            <div className="group">
+                <textarea
+                    className={`${isResizable
+                        ? "resizable"
+                        : ""
+                        }`}
+                    name={`${name ? name : ""}`}
+                    placeholder={placeholder}
+                    id={`${name ? name : ""}`}
+                    rows={`${rows ? rows : ""}`}
+                    cols={`${columns ? columns : ""}`}
+                    onChange={(e) => {
+                        onChange(e.target.value)
+                    }}
+                >
+                    {children}
+                </textarea>
+                {infoButton
+                    ? infoButton
+                    : null
+                }
+            </div>
         </div>
     )
 }

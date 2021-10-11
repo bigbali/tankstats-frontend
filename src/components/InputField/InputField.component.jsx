@@ -8,27 +8,39 @@ const InputField = ({
     placeholder,
     label,
     className,
-    onChange
+    onChange,
+    infoButton
 }) => {
     const _label = label
         ? <label>{label}</label>
         : null
 
     return (
-        <div className={`input-field 
+        <div className={`input-field     
+            ${infoButton
+                ? "has-info"
+                : ""
+            }    
             ${className
                 ? className
                 : ""
-            }`}>
+            }`}
+        >
             {_label}
-            <input
-                type={type}
-                value={value}
-                placeholder={placeholder}
-                onChange={(e) => {
-                    onChange(e.target.value)
-                }}
-            />
+            <div className="group">
+                <input
+                    type={type}
+                    value={value}
+                    placeholder={placeholder}
+                    onChange={(e) => {
+                        onChange(e.target.value)
+                    }}
+                />
+                {infoButton
+                    ? infoButton
+                    : null
+                }
+            </div>
         </div>
     )
 }
