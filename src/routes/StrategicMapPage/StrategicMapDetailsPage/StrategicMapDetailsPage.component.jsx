@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import db from '../../../util/db';
 import axe from 'gun/axe';
 import SEA from 'gun/sea';
+import InputField from '../../../components/InputField';
 
 window.db = db;
 //let SEA = Gun.SEA()
 
 const StrategicMapDetailsPage = ({ id }) => {
     // SET TO NULL
-    const [data, setData] = useState({
-        initial: "nemo aranka"
-    });
+    const [data, setData] = useState("404: Doesn't exist");
+    const [isEncrypted, setIsEncrypted] = useState(false);
 
     window.data = data
 
@@ -27,19 +27,37 @@ const StrategicMapDetailsPage = ({ id }) => {
     }, [id])
 
     useEffect(() => {
-        db.get("stratMap").get(id).on((value, gunid) => {
-            console.log(`%cON ${gunid}: ${JSON.stringify(value)}`, "background-color: black; color: white; padding: 0.25rem")
+        db.get("stratMap").get(id).on(async (value, gunid) => {
+            console.log(`%cON ${gunid}: ${JSON.stringify(value)}`, "background-color: black; color: white; padding: 0.25rem");
 
-            setData(previousData => ({
-                ...previousData,
-                [gunid]: {
-                    id: gunid,
-                    name: value.name,
-                    description: value.description,
-                    owner: value.owner,
-                    passwordProtected: value.passwordProtected
-                }
-            }))
+            // If 404, we never get here to begin with
+            setData(value)
+
+            if (!value.isPublic) {
+                setIsEncrypted(true)
+            }
+            else {
+            }
+
+            // if (!data) {
+            //     data = await SEA.decrypt(value, "password")
+            // }
+
+            // const decrypted = await SEA.decrypt(value, "password")
+            // console.log(decrypted)
+
+
+            // setData(previousData => ({
+            //     //...previousData,
+            //     // [gunid]: {
+            //     //     id: gunid,
+            //     //     name: value.name,
+            //     //     description: value.description,
+            //     //     owner: value.owner,
+            //     //     passwordProtected: value.passwordProtected
+            //     // }
+            //     [gunid]: data
+            // }))
         })
     }, [])
 
@@ -48,7 +66,7 @@ const StrategicMapDetailsPage = ({ id }) => {
     }, [data])
 
     if (data) {
-        if (data.is_password_protected && !data.is_authorized) {
+        if (isEncrypted) {
             return (
                 <h2 onClick={() => {
                     // fetch(`http://www.localhost:8000/api/strategic-maps/authenticate`, {
@@ -70,7 +88,19 @@ const StrategicMapDetailsPage = ({ id }) => {
                     //         console.log(error)
                     //     })
                 }}>
-                    This data is password protected.
+                    This data is encrypted.
+                    <InputField
+                        onChange={async (value) => {
+                            console.log(data)
+                            console.log(value)
+                            const decrypted = await SEA.decrypt(data, value)
+
+                            if (decrypted) {
+                                setData(decrypted)
+                                setIsEncrypted(false)
+                            }
+                        }}
+                    />
                 </h2>
             )
         }
@@ -107,9 +137,9 @@ const StrategicMapDetailsPage = ({ id }) => {
                 console.log(decdata)
                 console.log(fakedecdata)
 
-                db.get("stratMap").get(id).put(newStratMap, () => {
-                    console.log(`%cPUT ${id}`, "background-color: blue; color: white; padding: 0.25rem")
-                })
+                // db.get("stratMap").get(id).put(newStratMap, () => {
+                //     console.log(`%cPUT ${id}`, "background-color: blue; color: white; padding: 0.25rem")
+                // })
             }}>
                 {/* <h1>INTERACTIVE MAP</h1> */}
                 <pre>{JSON.stringify(data, "null", 4)}</pre>

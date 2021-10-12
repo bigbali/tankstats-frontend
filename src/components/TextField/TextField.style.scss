@@ -1,7 +1,8 @@
 .text-field {
     textarea {
+        display: block;
         width: 15rem;
-        height: 2rem;
+        height: 4rem;
         border: none;
         border-left: 0.25rem solid var(--color-main-foreground);
         padding: 0.5rem;
@@ -33,7 +34,7 @@
 
     &.has-info {
         textarea {
-            padding-right: 2rem;
+            padding-right: 1.4rem;
         }
     }
 
