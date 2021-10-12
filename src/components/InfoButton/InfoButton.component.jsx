@@ -11,30 +11,37 @@ const InfoButton = ({
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-        <div
-            className={`info-button
-                ${isExpanded
-                    ? "expanded"
-                    : ""
-                } 
-                ${className
-                    ? className
-                    : ""
-                }`}
-            style={style
-                ? style
-                : null
-            }
-            onClick={onClick}
-            onMouseEnter={() => {
-                setIsExpanded(true)
-            }}
-            onMouseLeave={() => {
-                setIsExpanded(false)
-            }}
-            text={children || text}
-        >
-        </div>
+        <>
+            <div
+                className={`info-button
+                    ${isExpanded
+                        ? "expanded"
+                        : ""
+                    } 
+                    ${className
+                        ? className
+                        : ""
+                    }`}
+                style={style
+                    ? style
+                    : null
+                }
+                onClick={onClick}
+                onMouseEnter={() => {
+                    setIsExpanded(true)
+                }}
+                onMouseLeave={() => {
+                    setIsExpanded(false)
+                }}
+            >
+                <div className="hover-toggle">
+                    ?
+                </div>
+                <div className="info-field">
+                    {children || text}
+                </div>
+            </div>
+        </>
     )
 }
 

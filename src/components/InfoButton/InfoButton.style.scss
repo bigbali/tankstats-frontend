@@ -1,54 +1,70 @@
 .info-button {
     position: absolute;
-    top: 0;
+    z-index: 99;
+    left: 0;
     right: 0;
+    top: 0;
     bottom: 0;
-    width: 1.5rem;
-    //height: 2rem;
+    cursor: pointer;
+    pointer-events: none;
 
-    &::before {
-        content: "?";
-        // 2 lines to center ;)
+    &:hover {
+        .hover-toggle {
+            background-color: var(--color-theme);
+        }
+    }
+
+    .hover-toggle {
         display: grid;
         place-items: center;
         position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
         right: 0;
+        padding: 0.2rem;
+        height: 100%;
         background-color: var(--color-main-foreground);
         color: var(--color-white);
         font-family: "Roboto Mono";
         font-size: 1.2rem;
-        cursor: pointer;
+        pointer-events: all;
         transition: background-color 0.1s;
     }
 
-    &::after {
-        content: attr(text);
+    // Actual information field
+    .info-field {
         position: absolute;
+        left: 0;
         top: 100%;
-        //left: 0;
-        right: 0;
-        width: 1160%;
         padding: 0.5rem;
         background-color: var(--color-main-foreground);
         color: var(--color-white);
-        font-weight: 400;
-        cursor: pointer;
-        transform: translateY(1rem);
         opacity: 0;
         pointer-events: none;
+        transform: translateY(1rem);
         transition: opacity 0.1s, transform 0.1s;
+
+        // Upwards arrow in the middle
+        &::before {
+            display: flex;
+            justify-content: center;
+            content: "";
+            position: absolute;
+            margin: auto;
+            left: 0;
+            right: 0;
+            top: -1rem;
+            width: 1rem;
+            height: 1rem;
+            background: conic-gradient(at 50% 50%, transparent 135deg,
+                    var(--color-main-foreground) 0,
+                    var(--color-main-foreground) 225deg, transparent 0);
+        }
     }
 
-    &:hover::before {
-        background-color: var(--color-theme);
-    }
-
-    &.expanded::after {
-        opacity: 1;
-        pointer-events: all;
-        transform: translateY(0);
+    &.expanded {
+        .info-field {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
     }
 }

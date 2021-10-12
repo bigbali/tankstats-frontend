@@ -5,7 +5,8 @@ const Button = ({
     children,
     onClick,
     isPrimary,
-    size
+    size,
+    className
 }) => {
     return (
         <button
@@ -14,10 +15,8 @@ const Button = ({
                     ? "primary"
                     : ""
                 }
-                ${size
-                    ? size
-                    : ""
-                }`}
+                ${size || ""}
+                ${className || ""}`}
             onClick={onClick}>
             {children}
         </button>

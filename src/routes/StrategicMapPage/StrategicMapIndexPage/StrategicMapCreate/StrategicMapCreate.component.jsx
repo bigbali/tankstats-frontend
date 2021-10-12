@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import db from '../../../../util/db';
+import SEA from 'gun/sea';
+import Button from '../../../../components/Button';
 import InfoButton from '../../../../components/InfoButton';
 import InputField from '../../../../components/InputField';
 import StyleableCloseIconSVG from '../../../../components/StyleableCloseIconSVG';
@@ -12,6 +15,34 @@ const StrategicMapCreate = ({
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [password, setPassword] = useState("");
+
+    const createStrategicMap = async () => {
+        // Get UUID from backend
+        fetch("http://www.localhost:8000/api/uuid")
+            .then(response => response.json())
+            .then(async (data) => {
+                console.log(data.uuid)
+
+                let strategicMap = {
+                    id: data.uuid,
+                    name: name,
+                    description: description,
+                    isPublic: true
+                }
+
+                if (password) {
+                    strategicMap.isPublic = false;
+                    strategicMap = await SEA.encrypt(strategicMap, password);
+                }
+
+                db.get("stratMap").get(data.uuid).put(strategicMap, () => {
+                    console.log(`Created strategic map with UUID ${data.uuid}`)
+                });
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
 
     return (
         <>
@@ -30,7 +61,7 @@ const StrategicMapCreate = ({
                     <div className="left">
                         <InputField
                             type="text"
-                            label="Name of strategic map"
+                            label="Name of your strategy"
                             placeholder="Unnamed"
                             onChange={setName}
                             infoButton={
@@ -49,7 +80,7 @@ const StrategicMapCreate = ({
                             onChange={setDescription}
                             infoButton={
                                 <InfoButton>
-                                    Name of your strategic map. Doesn't need to be unique.
+                                    Describe your strategy.
                                 </InfoButton>
                             }
                         />
@@ -59,6 +90,13 @@ const StrategicMapCreate = ({
                             placeholder="MyPassword123"
                             onChange={setPassword}
                         />
+                        <Button
+                            isPrimary={true}
+                            className="mt-5"
+                            onClick={createStrategicMap}
+                        >
+                            Create
+                        </Button>
                     </div>
                     <div className="right">
 
