@@ -4,6 +4,7 @@ import HomePage from './routes/HomePage';
 import StatisticsPage from './routes/StatisticsPage';
 import MapPage from './routes/MapPage';
 import StrategicMapPage from './routes/StrategicMapPage';
+import LoginPage from './routes/LoginPage';
 
 
 function App() {
@@ -25,6 +26,8 @@ function App() {
                     component={StrategicMapPage} />
                 <Route exact path="/strategic-maps/:id"
                     component={StrategicMapPage} />
+                <Route path="/login/"
+                    component={LoginPage} />
 
                 {/* Catch 404 */}
                 <Route>

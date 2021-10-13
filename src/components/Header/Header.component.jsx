@@ -1,3 +1,4 @@
+import HeaderAccount from '../HeaderAccount';
 import HeaderNavigation from '../HeaderNavigation/HeaderNavigation.component';
 import HeaderSearchForm from '../HeaderSearchForm/HeaderSearchForm.component';
 import Logo from '../Logo';
@@ -9,6 +10,7 @@ const Header = () => {
             <Logo />
             <HeaderNavigation />
             <HeaderSearchForm />
+            <HeaderAccount />
         </header>
     )
 }

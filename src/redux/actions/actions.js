@@ -64,3 +64,16 @@ export const statisticsSearchSetId = (id) => {
         }
     }
 }
+
+export const login = (userData) => {
+    return {
+        type: actions.LOGIN,
+        payload: userData
+    }
+}
+
+export const logout = () => {
+    return {
+        type: actions.LOGOUT
+    }
+}

@@ -18,3 +18,6 @@ export const STATISTICS_SEARCH_SELECT_SERVER = "statistics_search/select_server"
 export const STATISTICS_SEARCH_SET_NAME      = "statistics_search/set_name";
 export const STATISTICS_SEARCH_SET_ID        = "statistics_search/set_id";
 
+export const LOGIN  = "login";
+export const LOGOUT = "logout";
+
