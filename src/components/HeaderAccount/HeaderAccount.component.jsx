@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { login, logout } from '../../redux/actions/actions';
@@ -8,15 +8,28 @@ import './HeaderAccount.style.scss';
 
 
 const HeaderAccount = () => {
+    const [isExpanded, setIsExpanded] = useState(false);
     const location = useLocation();
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     const loginUrl = `https://api.worldoftanks.eu/wot/auth/login/?application_id=62da3ef417f70e5ffeb44cf6fa339e1e&redirect_uri=http://${window.location.host}/login/?redirect=${location.pathname}`;
 
+    const getDaysLeft = () => {
+        // Get days left till access token expires
+        const futureDate = new Date(user.expires_at * 1000);
+        const currentDate = new Date();
+        const offset = 14 * 24 * 3600 * 1000;
+        const delta = new Date(futureDate.getTime() - offset)
+
+        return Math.floor((futureDate.getTime() - currentDate.getTime()) / (1000 * 3600 * 24))
+    }
+
     const LoginButton = () => {
         return (
             <a href={loginUrl}>
-                <Button>
+                <Button
+                    isPrimary={true}
+                >
                     Log in
                 </Button>
             </a>
@@ -33,6 +46,14 @@ const HeaderAccount = () => {
         )
     }
 
+    const Nickname = () => {
+        return (
+            <span>
+                {user.nickname}
+            </span>
+        )
+    }
+
     useEffect(() => {
         console.log(location)
     }, [location])
@@ -41,12 +62,20 @@ const HeaderAccount = () => {
     return (
         user
             ? (
-                <div className="header-account">
-                    <LogoutButton />
+                <div className={`header-account 
+                    ${isExpanded
+                        ? "expanded"
+                        : ""
+                    }`}>
+                    {/* <LogoutButton /> */}
+                    <Nickname />
                     <StyleableAccountIconSVG onClick={() => {
-                        dispatch(login("mialófasz a nevem"));
-                        console.log(user)
+                        setIsExpanded(previous => !previous)
                     }} />
+                    <div className="menu">
+                        Your session will expire in {getDaysLeft()} days.
+                        <LogoutButton />
+                    </div>
                 </div>
             )
             : <LoginButton />
