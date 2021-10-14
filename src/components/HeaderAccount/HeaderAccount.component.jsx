@@ -48,7 +48,7 @@ const HeaderAccount = () => {
 
     const Nickname = () => {
         return (
-            <span>
+            <span className="medium">
                 {user.nickname}
             </span>
         )
@@ -67,13 +67,18 @@ const HeaderAccount = () => {
                         ? "expanded"
                         : ""
                     }`}>
-                    {/* <LogoutButton /> */}
                     <Nickname />
                     <StyleableAccountIconSVG onClick={() => {
                         setIsExpanded(previous => !previous)
                     }} />
                     <div className="menu">
-                        Your session will expire in {getDaysLeft()} days.
+                        <div>
+                            Your token will expire in {getDaysLeft()} days.
+                        </div>
+                        <div>
+                            {/* TODO: */}
+                            Renew token
+                        </div>
                         <LogoutButton />
                     </div>
                 </div>
