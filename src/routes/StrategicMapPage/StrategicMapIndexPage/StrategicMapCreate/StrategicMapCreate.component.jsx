@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import db from '../../../../util/db';
+import { useSelector } from 'react-redux';
 import SEA from 'gun/sea';
+import db from '../../../../util/db';
 import Button from '../../../../components/Button';
 import InfoButton from '../../../../components/InfoButton';
 import InputField from '../../../../components/InputField';
@@ -15,6 +16,7 @@ const StrategicMapCreate = ({
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [password, setPassword] = useState("");
+    const user = useSelector(state => state.user);
 
     const createStrategicMap = async () => {
         // Get UUID from backend
@@ -61,6 +63,18 @@ const StrategicMapCreate = ({
                     <div className="left">
                         <InputField
                             type="text"
+                            label="Owner"
+                            value={user ? user.nickname : "Anonymous"}
+                            isDisabled={true}
+                            placeholder="Unnamed"
+                            infoButton={
+                                <InfoButton>
+                                    Username of owner. Automatically set to logged in user. Can't be edited.
+                                </InfoButton>
+                            }
+                        />
+                        <InputField
+                            type="text"
                             label="Name of your strategy"
                             placeholder="Unnamed"
                             onChange={setName}
@@ -92,7 +106,7 @@ const StrategicMapCreate = ({
                         />
                         <Button
                             isPrimary={true}
-                            className="mt-5"
+
                             onClick={createStrategicMap}
                         >
                             Create

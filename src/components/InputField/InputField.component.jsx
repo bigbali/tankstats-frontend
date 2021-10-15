@@ -9,6 +9,7 @@ const InputField = ({
     label,
     className,
     onChange,
+    isDisabled = false,
     infoButton
 }) => {
     const _label = label
@@ -29,6 +30,7 @@ const InputField = ({
             {_label}
             <div className="group">
                 <input
+                    disabled={isDisabled}
                     type={type}
                     value={value}
                     placeholder={placeholder}

@@ -6,6 +6,7 @@
     height: 50%;
     margin: auto;
     padding: 2rem;
+    padding-bottom: 5rem;
     background-color: var(--color-main-background);
     opacity: 0;
     pointer-events: none;
@@ -35,5 +36,10 @@
         textarea {
             width: 100%;
         }
+    }
+
+    .button {
+        position: absolute;
+        bottom: 2rem;
     }
 }
