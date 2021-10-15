@@ -16,6 +16,7 @@
 
     .menu {
         position: absolute;
+        z-index: 99;
         top: 3rem;
         left: -0.5rem;
         right: -0.5rem;
@@ -53,6 +54,35 @@
             opacity: 1;
             pointer-events: all;
             transform: translateY(0);
+        }
+    }
+
+    .expire {
+        position: relative;
+        padding-right: 1rem;
+    }
+
+    .info-button {
+        height: 100%;
+
+        .info-field {
+            left: calc(-100% - 5rem);
+            right: calc(100% + 1rem);
+            top: -1rem;
+
+            &::before {
+                all: initial;
+                display: block;
+                content: "";
+                position: absolute;
+                right: -1rem;
+                top: 1.75rem;
+                width: 1rem;
+                height: 1rem;
+                background: conic-gradient(at 50% 50%, transparent 135deg, var(--color-main-foreground) 0, var(--color-main-foreground) 225deg, transparent 0);
+                transform: rotate(90deg);
+                pointer-events: none;
+            }
         }
     }
 }

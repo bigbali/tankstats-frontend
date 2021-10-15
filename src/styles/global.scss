@@ -104,6 +104,14 @@ a {
     font-weight: 500;
 }
 
+.absolute {
+    position: absolute;
+}
+
+.relative {
+    position: relative;
+}
+
 .backdrop {
     position: absolute;
     z-index: 1;
