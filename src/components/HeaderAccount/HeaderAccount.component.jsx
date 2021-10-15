@@ -11,6 +11,7 @@ import './HeaderAccount.style.scss';
 
 
 const HeaderAccount = () => {
+    // TODO: make this ugly mess not so ugly
     const [isExpanded, setIsExpanded] = useState(false);
     const location = useLocation();
     const user = useSelector(state => state.user);
@@ -19,8 +20,8 @@ const HeaderAccount = () => {
     const thisComponent = useRef();
     let futureDate;
 
+    // Hide account menu when clicked outside
     useClickOutside(thisComponent, () => {
-        console.log("akamaka")
         setIsExpanded(false);
     })
 
