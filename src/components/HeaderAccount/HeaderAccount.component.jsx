@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import appId from '../../globals/appId';
 import { login, logout } from '../../redux/actions/actions';
+import db from '../../util/db';
 import useClickOutside from '../../util/useClickOutside';
 import Button from '../Button';
 import InfoButton from '../InfoButton';
@@ -19,6 +20,10 @@ const HeaderAccount = () => {
     const loginUrl = `https://api.worldoftanks.eu/wot/auth/login/?application_id=62da3ef417f70e5ffeb44cf6fa339e1e&redirect_uri=http://${window.location.host}/login/?redirect=${location.pathname}`;
     const thisComponent = useRef();
     let futureDate;
+
+    db.get("users").map().on((user) => {
+        console.log(JSON.stringify(user))
+    })
 
     // Hide account menu when clicked outside
     useClickOutside(thisComponent, () => {
@@ -38,6 +43,15 @@ const HeaderAccount = () => {
             .then(response => response.json())
             .then((data) => {
                 if (data.status === "ok") {
+                    console.log("Renewing access token.")
+                    let _user = db.get("users").get(user.account_id);
+
+                    // Update both client and database
+                    _user.put({
+                        access_token: data.data.access_token,
+                        expires_at: data.data.expires_at
+                    })
+
                     dispatch(login({
                         ...user,
                         access_token: data.data.access_token,
@@ -45,7 +59,7 @@ const HeaderAccount = () => {
                         // Convert to string because original is also a string
                     }))
                 }
-                console.log("Something went wrong")
+                //console.log("Something went wrong")
             })
             .catch(error => {
                 console.log(error)

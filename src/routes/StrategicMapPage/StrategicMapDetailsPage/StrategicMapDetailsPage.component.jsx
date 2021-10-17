@@ -68,40 +68,43 @@ const StrategicMapDetailsPage = ({ id }) => {
     if (data) {
         if (isEncrypted) {
             return (
-                <h2 onClick={() => {
-                    // fetch(`http://www.localhost:8000/api/strategic-maps/authenticate`, {
-                    //     method: "POST",
-                    //     body: JSON.stringify({
-                    //         id: id,
-                    //         password: "szilva"
-                    //     }),
-                    //     headers: {
-                    //         "Content-type": "application/json; charset=UTF-8"
-                    //     }
-                    // })
-                    //     .then(response => response.json())
-                    //     .then(data => {
-                    //         //console.log(JSON.stringify(data))
-                    //         setData(data)
-                    //     })
-                    //     .catch(error => {
-                    //         console.log(error)
-                    //     })
-                }}>
-                    This data is encrypted.
-                    <InputField
-                        onChange={async (value) => {
-                            console.log(data)
-                            console.log(value)
-                            const decrypted = await SEA.decrypt(data, value)
+                <>
+                    <h2 onClick={() => {
+                        // fetch(`http://www.localhost:8000/api/strategic-maps/authenticate`, {
+                        //     method: "POST",
+                        //     body: JSON.stringify({
+                        //         id: id,
+                        //         password: "szilva"
+                        //     }),
+                        //     headers: {
+                        //         "Content-type": "application/json; charset=UTF-8"
+                        //     }
+                        // })
+                        //     .then(response => response.json())
+                        //     .then(data => {
+                        //         //console.log(JSON.stringify(data))
+                        //         setData(data)
+                        //     })
+                        //     .catch(error => {
+                        //         console.log(error)
+                        //     })
+                    }}>
+                        This data is encrypted.
+                        <InputField
+                            onChange={async (value) => {
+                                console.log(data)
+                                console.log(value)
+                                const decrypted = await SEA.decrypt(data, value)
 
-                            if (decrypted) {
-                                setData(decrypted)
-                                setIsEncrypted(false)
-                            }
-                        }}
-                    />
-                </h2>
+                                if (decrypted) {
+                                    setData(decrypted)
+                                    setIsEncrypted(false)
+                                }
+                            }}
+                        />
+                    </h2>
+                    <pre>{JSON.stringify(data, "null", 4)}</pre>
+                </>
             )
         }
         return (

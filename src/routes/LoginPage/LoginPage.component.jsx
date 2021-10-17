@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../redux/actions/actions';
+import db from '../../util/db';
 
 const LoginPage = () => {
     const search = window.location.search;
@@ -16,6 +17,28 @@ const LoginPage = () => {
     const expires_at = params.get('expires_at');
 
     if (status === "ok") {
+        let user = db.get("users").get(account_id);
+
+        user.once((currentUser) => {
+            if (!currentUser) {
+                console.log("User does not exist. Creating it...")
+
+                user.put({
+                    nickname,
+                    access_token,
+                    expires_at
+                })
+            }
+            else if (currentUser && currentUser.access_token !== access_token) {
+                console.log("User exists but access token doesn't match! Updating...")
+
+                user.put({
+                    access_token,
+                    expires_at
+                })
+            }
+        })
+
         dispatch(login({
             access_token,
             nickname,

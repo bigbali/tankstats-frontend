@@ -8,6 +8,7 @@ import InputField from '../../../../components/InputField';
 import StyleableCloseIconSVG from '../../../../components/StyleableCloseIconSVG';
 import TextField from '../../../../components/TextField';
 import './StrategicMapCreate.style.scss';
+import Checkbox from '../../../../components/Checkbox';
 
 const StrategicMapCreate = ({
     isExpanded,
@@ -16,6 +17,7 @@ const StrategicMapCreate = ({
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [password, setPassword] = useState("");
+    const [isPrivate, setIsPrivate] = useState(true);
     const user = useSelector(state => state.user);
 
     const createStrategicMap = async () => {
@@ -23,17 +25,35 @@ const StrategicMapCreate = ({
         fetch("http://www.localhost:8000/api/uuid")
             .then(response => response.json())
             .then(async (data) => {
-                console.log(data.uuid)
-
+                // Should be on backend, for security reasons
+                // (for example, malicious person could create a map in 
+                // someone else's name or inject unsafe code that will be
+                // executed on other user's client)
                 let strategicMap = {
                     id: data.uuid,
-                    name: name,
-                    description: description,
-                    isPublic: true
+                    name: name
+                        || null,
+                    description: description
+                        || null,
+                    isPrivate: isPrivate,
+                    owner: user
+                        ? user.account_id
+                        : null,
+                    isLoginRequired: false,
+                    isEditable: true,
+                    willSelfDestruct: false,
+                    maps: [],
+                    arbitraryOverlays: [],
+                    dateCreated: new Date().getTime()
                 }
 
+
                 if (password) {
-                    strategicMap.isPublic = false;
+                    const pair = await SEA.pair();
+                    const data = await SEA.sign(strategicMap, pair)
+
+                    console.log(pair)
+                    console.log(data)
                     strategicMap = await SEA.encrypt(strategicMap, password);
                 }
 
@@ -45,6 +65,8 @@ const StrategicMapCreate = ({
                 console.log(error)
             })
     }
+
+
 
     return (
         <>
@@ -72,6 +94,13 @@ const StrategicMapCreate = ({
                                     Username of owner. Automatically set to logged in user. Can't be edited.
                                 </InfoButton>
                             }
+                        />
+                        <Checkbox
+                            label="Private"
+                            value={isPrivate}
+                            onChange={() => {
+                                setIsPrivate(value => !value)
+                            }}
                         />
                         <InputField
                             type="text"
@@ -103,6 +132,18 @@ const StrategicMapCreate = ({
                             label="Password"
                             placeholder="MyPassword123"
                             onChange={setPassword}
+                            isDisabled={!isPrivate}
+                            infoButton={
+                                <InfoButton>
+                                    Without a password, the strategic map
+                                    will not be encrypted, therefore anybody
+                                    will be able to access it.
+                                    If password is given, it will be encrypted,
+                                    and without the password, it will be impossible to unlock.
+                                    <br />
+                                    <strong>Remember your password!</strong>
+                                </InfoButton>
+                            }
                         />
                         <Button
                             isPrimary={true}
