@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { useLocation, Redirect } from 'react-router-dom';
 import appId from '../../globals/appId';
 import { login, logout } from '../../redux/actions/actions';
 import db from '../../util/db';
@@ -8,6 +8,7 @@ import useClickOutside from '../../util/useClickOutside';
 import Button from '../Button';
 import InfoButton from '../InfoButton';
 import StyleableAccountIconSVG from '../StyleableAccountIconSVG';
+import { LOGIN_URL } from '../../globals/url';
 import './HeaderAccount.style.scss';
 
 
@@ -17,7 +18,7 @@ const HeaderAccount = () => {
     const location = useLocation();
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
-    const loginUrl = `https://api.worldoftanks.eu/wot/auth/login/?application_id=62da3ef417f70e5ffeb44cf6fa339e1e&redirect_uri=http://${window.location.host}/login/?redirect=${location.pathname}`;
+    const loginUrl = `https://api.worldoftanks.eu/wot/auth/login/?application_id=62da3ef417f70e5ffeb44cf6fa339e1e&redirect_uri=${LOGIN_URL}/?redirect=${location.pathname}`;
     const thisComponent = useRef();
     let futureDate;
 
@@ -88,6 +89,25 @@ const HeaderAccount = () => {
         )
     }
 
+    const PenisButton = () => {
+        return (
+            <Button
+                isPrimary={false}
+                onClick={() => {
+                    fetch(`https://api.worldoftanks.eu/wot/auth/login/?application_id=62da3ef417f70e5ffeb44cf6fa339e1e&nofollow=1&redirect_uri=http://${window.location.host}/api/auth/`.replace("3000", "8765"), { method: "POST" })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data)
+                            window.location.href = data.data.location;
+                        })
+                        .catch(error => console.log(error))
+                }}
+            >
+                SUPERLOGIN
+            </Button>
+        )
+    }
+
     const LogoutButton = () => {
         return (
             <Button onClick={() => {
@@ -109,7 +129,6 @@ const HeaderAccount = () => {
     useEffect(() => {
         console.log(location)
     }, [location])
-
 
     return (
         user
@@ -144,7 +163,10 @@ const HeaderAccount = () => {
                     </div>
                 </div>
             )
-            : <LoginButton />
+            : <div>
+                <LoginButton />
+                <PenisButton />
+            </div>
 
     )
 }

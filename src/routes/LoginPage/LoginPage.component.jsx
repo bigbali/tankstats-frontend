@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../redux/actions/actions';
 import db from '../../util/db';
+import appId from '../../globals/appId';
+import { AUTH_ENDPOINT } from '../../globals/url';
 
 const LoginPage = () => {
     const search = window.location.search;
@@ -16,43 +18,38 @@ const LoginPage = () => {
     const account_id = params.get('account_id');
     const expires_at = params.get('expires_at');
 
-    if (status === "ok") {
-        let user = db.get("users").get(account_id);
-
-        user.once((currentUser) => {
-            if (!currentUser) {
-                console.log("User does not exist. Creating it...")
-
-                user.put({
-                    nickname,
-                    access_token,
-                    expires_at
+    useEffect(() => {
+        const authenticateUser = async () => {
+            const user = await fetch(AUTH_ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    access_token: access_token
                 })
-            }
-            else if (currentUser && currentUser.access_token !== access_token) {
-                console.log("User exists but access token doesn't match! Updating...")
-
-                user.put({
-                    access_token,
-                    expires_at
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
                 })
-            }
-        })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
 
-        dispatch(login({
-            access_token,
-            nickname,
-            account_id,
-            expires_at
-        }));
-    }
-    else {
-        console.error(`Authentication failed with error ${status}`)
-    }
+        if (status === "ok") {
+            authenticateUser();
+        }
+        else {
+            console.error(`Status not ok?`)
+        }
+    }, [])
 
-    return (
-        <Redirect to={redirect} />
-    )
+    return <h1>
+        Waiting for redirect, please wait
+    </h1>
 }
 
 // Encryption
