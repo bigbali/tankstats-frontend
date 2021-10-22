@@ -1,15 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../redux/actions/actions';
 import db from '../../util/db';
 import appId from '../../globals/appId';
+import { SEA } from 'gun';
 import { AUTH_ENDPOINT } from '../../globals/url';
 
 const LoginPage = () => {
-    const search = window.location.search;
-    const params = new URLSearchParams(search);
+    const params = new URLSearchParams(window.location.search);
     const dispatch = useDispatch();
+
+    const [isFinished, setIsFinished] = useState(false);
+
+    // Allow calling from console
+    window.gun = db;
 
     const redirect = params.get('redirect');
     const status = params.get('status');
@@ -20,19 +25,39 @@ const LoginPage = () => {
 
     useEffect(() => {
         const authenticateUser = async () => {
-            const user = await fetch(AUTH_ENDPOINT, {
+            fetch(AUTH_ENDPOINT, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json"
                 },
                 body: JSON.stringify({
-                    access_token: access_token
+                    access_token: access_token,
+                    account_id: account_id,
+                    nickname: nickname
                 })
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
+                    localStorage.setItem("secret_key", data.encryptionKey)
+                    return data.encryptionKey
+                })
+                .then(key => {
+                    if (!key) return null // Prevent trying to decrypt without key
+
+                    // After decryption key is set in localStorage,
+                    // forward it here and use it to decrypt user data,
+                    // then log user in
+                    db.get("users").get(account_id).once(async (user) => {
+                        const decryptedUser = await SEA.decrypt(user, key);
+
+                        dispatch(login({
+                            ...decryptedUser
+                        }))
+
+                        // Login successful, now please redirect me to wherever I was
+                        setIsFinished(true);
+                    })
                 })
                 .catch((error) => {
                     console.log(error)
@@ -47,6 +72,11 @@ const LoginPage = () => {
         }
     }, [])
 
+    if (isFinished) {
+        return <Redirect to={redirect} />
+    }
+
+    // DO: if no key, or for whatever reason login fails, display message
     return <h1>
         Waiting for redirect, please wait
     </h1>

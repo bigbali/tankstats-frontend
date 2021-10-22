@@ -23,7 +23,9 @@ const HeaderAccount = () => {
     let futureDate;
 
     db.get("users").map().on((user) => {
-        console.log(JSON.stringify(user))
+        // console.log("HeaderAccount: user is ->")
+        // console.log(JSON.stringify(user))
+        //console.log(localStorage.getItem("secret_key"))
     })
 
     // Hide account menu when clicked outside
@@ -37,34 +39,34 @@ const HeaderAccount = () => {
         formData.append('application_id', appId);
         formData.append('access_token', user.access_token);
 
-        fetch("https://api.worldoftanks.eu/wot/auth/prolongate/", {
-            method: "POST",
-            body: formData
-        })
-            .then(response => response.json())
-            .then((data) => {
-                if (data.status === "ok") {
-                    console.log("Renewing access token.")
-                    let _user = db.get("users").get(user.account_id);
+        // fetch("https://api.worldoftanks.eu/wot/auth/prolongate/", {
+        //     method: "POST",
+        //     body: formData
+        // })
+        //     .then(response => response.json())
+        //     .then((data) => {
+        //         if (data.status === "ok") {
+        //             console.log("Renewing access token.")
+        //             let _user = db.get("users").get(user.account_id);
 
-                    // Update both client and database
-                    _user.put({
-                        access_token: data.data.access_token,
-                        expires_at: data.data.expires_at
-                    })
+        //             // Update both client and database
+        //             _user.put({
+        //                 access_token: data.data.access_token,
+        //                 expires_at: data.data.expires_at
+        //             })
 
-                    dispatch(login({
-                        ...user,
-                        access_token: data.data.access_token,
-                        expires_at: data.data.expires_at.toString()
-                        // Convert to string because original is also a string
-                    }))
-                }
-                //console.log("Something went wrong")
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        //             dispatch(login({
+        //                 ...user,
+        //                 access_token: data.data.access_token,
+        //                 expires_at: data.data.expires_at.toString()
+        //                 // Convert to string because original is also a string
+        //             }))
+        //         }
+        //         //console.log("Something went wrong")
+        //     })
+        //     .catch(error => {
+        //         console.log(error)
+        //     })
     }
 
     // Get days left till access token expires
@@ -78,6 +80,8 @@ const HeaderAccount = () => {
     }
 
     const LoginButton = () => {
+        // This will redirect to WG for authentication, which in turn will redirect
+        // to local login page, which will ask backend to confirm identity of user
         return (
             <a href={loginUrl}>
                 <Button
@@ -89,25 +93,7 @@ const HeaderAccount = () => {
         )
     }
 
-    const PenisButton = () => {
-        return (
-            <Button
-                isPrimary={false}
-                onClick={() => {
-                    fetch(`https://api.worldoftanks.eu/wot/auth/login/?application_id=62da3ef417f70e5ffeb44cf6fa339e1e&nofollow=1&redirect_uri=http://${window.location.host}/api/auth/`.replace("3000", "8765"), { method: "POST" })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data)
-                            window.location.href = data.data.location;
-                        })
-                        .catch(error => console.log(error))
-                }}
-            >
-                SUPERLOGIN
-            </Button>
-        )
-    }
-
+    // DO: 
     const LogoutButton = () => {
         return (
             <Button onClick={() => {
@@ -165,7 +151,6 @@ const HeaderAccount = () => {
             )
             : <div>
                 <LoginButton />
-                <PenisButton />
             </div>
 
     )
