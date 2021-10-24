@@ -9,7 +9,7 @@ export const toggleisLoading = () => {
 }
 
 export const setIsLoading = (isTrue) => {
-    if (isTrue){
+    if (isTrue) {
         return {
             type: actions.LOADING_SET_TRUE,
         }
@@ -75,5 +75,15 @@ export const login = (userData) => {
 export const logout = () => {
     return {
         type: actions.LOGOUT
+    }
+}
+
+export const flash = (flashObject) => {
+    return {
+        type: actions.FLASH,
+        payload: {
+            title: flashObject.title,
+            message: flashObject.message
+        }
     }
 }

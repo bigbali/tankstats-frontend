@@ -1,5 +1,6 @@
 const initialState = {
-    user: null
+    user: null,
+    flash: null
 }
 
 export default initialState;

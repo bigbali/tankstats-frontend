@@ -5,11 +5,13 @@ import StatisticsPage from './routes/StatisticsPage';
 import MapPage from './routes/MapPage';
 import StrategicMapPage from './routes/StrategicMapPage';
 import LoginPage from './routes/LoginPage';
+import Flash from './components/Flash';
 
 
 function App() {
     return (
         <Router>
+            <Flash />
             <Header />
             <Switch>
                 <Route exact path="/"

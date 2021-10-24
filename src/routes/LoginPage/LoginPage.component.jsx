@@ -11,7 +11,8 @@ const LoginPage = () => {
     const params = new URLSearchParams(window.location.search);
     const dispatch = useDispatch();
 
-    const [isFinished, setIsFinished] = useState(false);
+    const [hasFinished, setHasFinished] = useState(false);
+    const [hasFailed, setHasFailed] = useState(false);
 
     // Allow calling from console
     window.gun = db;
@@ -39,11 +40,15 @@ const LoginPage = () => {
             })
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data)
                     localStorage.setItem("secret_key", data.encryptionKey)
                     return data.encryptionKey
                 })
                 .then(key => {
-                    if (!key) return null // Prevent trying to decrypt without key
+                    if (!key) {
+                        setHasFailed(true);
+                        return null // Prevent trying to decrypt without key
+                    }
 
                     // After decryption key is set in localStorage,
                     // forward it here and use it to decrypt user data,
@@ -56,10 +61,11 @@ const LoginPage = () => {
                         }))
 
                         // Login successful, now please redirect me to wherever I was
-                        setIsFinished(true);
+                        setHasFinished(true);
                     })
                 })
                 .catch((error) => {
+                    setHasFailed(true);
                     console.log(error)
                 })
         }
@@ -72,8 +78,11 @@ const LoginPage = () => {
         }
     }, [])
 
-    if (isFinished) {
+    if (hasFinished && !hasFailed) {
         return <Redirect to={redirect} />
+    }
+    else if (hasFinished && hasFailed) {
+        return <h1>Authentication failed</h1>
     }
 
     // DO: if no key, or for whatever reason login fails, display message

@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useLocation, Redirect } from 'react-router-dom';
 import appId from '../../globals/appId';
-import { login, logout } from '../../redux/actions/actions';
+import { flash, login, logout } from '../../redux/actions/actions';
 import db from '../../util/db';
+import SEA from 'gun/sea';
 import useClickOutside from '../../util/useClickOutside';
 import Button from '../Button';
 import InfoButton from '../InfoButton';
 import StyleableAccountIconSVG from '../StyleableAccountIconSVG';
-import { LOGIN_URL } from '../../globals/url';
+import { AUTH_ENDPOINT, LOGIN_URL } from '../../globals/url';
 import './HeaderAccount.style.scss';
 
 
@@ -23,7 +24,7 @@ const HeaderAccount = () => {
     let futureDate;
 
     db.get("users").map().on((user) => {
-        // console.log("HeaderAccount: user is ->")
+        console.log(user)
         // console.log(JSON.stringify(user))
         //console.log(localStorage.getItem("secret_key"))
     })
@@ -34,39 +35,60 @@ const HeaderAccount = () => {
     })
 
     const renewAccessToken = () => {
-        // WG API only accepts formdata
-        let formData = new FormData();
-        formData.append('application_id', appId);
-        formData.append('access_token', user.access_token);
+        // REFACTOR
+        if (user) {
+            fetch(AUTH_ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    access_token: user.access_token,
+                    account_id: user.account_id,
+                    nickname: user.nickname
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    localStorage.setItem("secret_key", data.encryptionKey)
+                    return data.encryptionKey
+                })
+                .then(key => {
+                    if (!key) {
+                        dispatch(flash({
+                            title: "Error:",
+                            message: "Failed to renew access token"
+                        }))
 
-        // fetch("https://api.worldoftanks.eu/wot/auth/prolongate/", {
-        //     method: "POST",
-        //     body: formData
-        // })
-        //     .then(response => response.json())
-        //     .then((data) => {
-        //         if (data.status === "ok") {
-        //             console.log("Renewing access token.")
-        //             let _user = db.get("users").get(user.account_id);
+                        return null // Prevent trying to decrypt without key
+                    }
 
-        //             // Update both client and database
-        //             _user.put({
-        //                 access_token: data.data.access_token,
-        //                 expires_at: data.data.expires_at
-        //             })
+                    // After decryption key is set in localStorage,
+                    // forward it here and use it to decrypt user data,
+                    // then log user in
+                    db.get("users").get(user.account_id).once(async (user) => {
+                        const decryptedUser = await SEA.decrypt(user, key);
 
-        //             dispatch(login({
-        //                 ...user,
-        //                 access_token: data.data.access_token,
-        //                 expires_at: data.data.expires_at.toString()
-        //                 // Convert to string because original is also a string
-        //             }))
-        //         }
-        //         //console.log("Something went wrong")
-        //     })
-        //     .catch(error => {
-        //         console.log(error)
-        //     })
+                        dispatch(login({
+                            ...decryptedUser
+                        }))
+
+                        // Login successful, now please redirect me to wherever I was
+                        dispatch(flash({
+                            title: "Success:",
+                            message: "Successfully renewed access token"
+                        }))
+                    })
+                })
+                .catch((error) => {
+                    dispatch(flash({
+                        title: "Error:",
+                        message: "Failed to renew access token"
+                    }))
+                    console.log(error)
+                })
+        }
     }
 
     // Get days left till access token expires
