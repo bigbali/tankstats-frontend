@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import StyleableCloseIconSVG from '../StyleableCloseIconSVG';
 import './Flash.style.scss';
 
 const Flash = () => {
@@ -8,26 +9,33 @@ const Flash = () => {
 
     useEffect(() => {
         if (flash) {
-            setIsExpanded(true);
-        }
-        else {
-            setIsExpanded(false);
-        }
+            // After delay, call expand, then close after timeout
+            setTimeout(() => {
+                setIsExpanded(!!flash); // Converts value to boolean
 
-        setTimeout(() => {
-            setIsExpanded(false);
-        }, 5000)
+                setTimeout(() => {
+                    setIsExpanded(false);
+                }, flash.timeout)
+            }, flash.delay)
+        }
     }, [flash])
 
-    if (flash) {
+    if (flash && (flash.title || flash.message)) {
         return (
             <div className={`flash 
                 ${isExpanded
                     ? "expanded"
                     : ""
                 }`}>
-                <h1>{flash.title}</h1>
-                <h3>{flash.message}</h3>
+                <h5>
+                    {flash.title}
+                </h5>
+                <p>
+                    {flash.message}
+                </p>
+                <StyleableCloseIconSVG onClick={() => {
+                    setIsExpanded(false);
+                }} />
             </div>
         )
     }

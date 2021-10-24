@@ -1,10 +1,11 @@
 .flash {
-    // width: 10rem;
-    // height: 5rem;
     position: fixed;
     bottom: 5rem;
     right: 5rem;
     padding: 1rem;
+    padding-right: 2rem; // Account for close button on top right
+    min-width: 10rem;
+    min-height: 5rem;
     background-color: var(--color-main-background);
     color: var(--color-main-foreground);
     box-shadow: 0 4px 35px rgba(155, 155, 155, 0.4);
@@ -17,5 +18,20 @@
         opacity: 1;
         pointer-events: all;
         transform: translateY(0);
+    }
+
+    h5 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.4rem;
+    }
+
+    p {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .styleable-close-icon-svg {
+        width: 1rem;
+        height: 1rem;
     }
 }

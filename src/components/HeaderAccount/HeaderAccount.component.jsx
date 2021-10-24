@@ -11,6 +11,7 @@ import InfoButton from '../InfoButton';
 import StyleableAccountIconSVG from '../StyleableAccountIconSVG';
 import { AUTH_ENDPOINT, LOGIN_URL } from '../../globals/url';
 import './HeaderAccount.style.scss';
+import flashMessage from '../../util/flash';
 
 
 const HeaderAccount = () => {
@@ -24,10 +25,12 @@ const HeaderAccount = () => {
     let futureDate;
 
     db.get("users").map().on((user) => {
-        console.log(user)
+        //console.log(user)
         // console.log(JSON.stringify(user))
         //console.log(localStorage.getItem("secret_key"))
     })
+
+    db.get("users").once(users => console.log(users))
 
     // Hide account menu when clicked outside
     useClickOutside(thisComponent, () => {
@@ -52,14 +55,16 @@ const HeaderAccount = () => {
                 .then(response => response.json())
                 .then(data => {
                     localStorage.setItem("secret_key", data.encryptionKey)
+                    console.log("NO KEY YO")
                     return data.encryptionKey
                 })
                 .then(key => {
                     if (!key) {
-                        dispatch(flash({
+                        flashMessage({
+                            delay: 500,
                             title: "Error:",
                             message: "Failed to renew access token"
-                        }))
+                        })
 
                         return null // Prevent trying to decrypt without key
                     }
@@ -74,19 +79,20 @@ const HeaderAccount = () => {
                             ...decryptedUser
                         }))
 
-                        // Login successful, now please redirect me to wherever I was
-                        dispatch(flash({
+                        flashMessage({
+                            delay: 500,
+                            timeout: 3000,
                             title: "Success:",
-                            message: "Successfully renewed access token"
-                        }))
+                            message: "Access token renewal succesful"
+                        })
                     })
                 })
                 .catch((error) => {
                     dispatch(flash({
+                        delay: 500,
                         title: "Error:",
                         message: "Failed to renew access token"
                     }))
-                    console.log(error)
                 })
         }
     }

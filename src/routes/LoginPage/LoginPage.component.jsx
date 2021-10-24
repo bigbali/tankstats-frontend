@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login } from '../../redux/actions/actions';
 import db from '../../util/db';
-import appId from '../../globals/appId';
 import { SEA } from 'gun';
 import { AUTH_ENDPOINT } from '../../globals/url';
+import flashMessage from '../../util/flash';
+import './LoginPage.style.scss';
+import store from '../../redux/store';
 
+// REFACTOR
 const LoginPage = () => {
     const params = new URLSearchParams(window.location.search);
     const dispatch = useDispatch();
@@ -47,6 +50,23 @@ const LoginPage = () => {
                 .then(key => {
                     if (!key) {
                         setHasFailed(true);
+
+                        // Edge case, where user navigates to login page and fills out GET query params correctly
+                        if (store.getState().user) {
+                            flashMessage({
+                                delay: 500,
+                                title: "Error:",
+                                message: "You are logged in already!"
+                            })
+                        }
+                        else {
+                            flashMessage({
+                                delay: 500,
+                                title: "Error:",
+                                message: "Login failed"
+                            })
+                        }
+
                         return null // Prevent trying to decrypt without key
                     }
 
@@ -60,79 +80,83 @@ const LoginPage = () => {
                             ...decryptedUser
                         }))
 
+                        flashMessage({
+                            delay: 1000,
+                            title: "Success:",
+                            message: "Login successful"
+                        })
+
+                        // Prevent bug where we could get stuck on auth error page
+                        if (hasFailed) {
+                            setHasFailed(false);
+                        }
                         // Login successful, now please redirect me to wherever I was
                         setHasFinished(true);
                     })
                 })
                 .catch((error) => {
+                    flashMessage({
+                        delay: 500,
+                        title: "Error:",
+                        message: "Login failed"
+                    })
                     setHasFailed(true);
-                    console.log(error)
                 })
         }
 
         if (status === "ok") {
             authenticateUser();
         }
-        else {
-            console.error(`Status not ok?`)
+        else if (status === "error") {
+            flashMessage({
+                delay: 500,
+                title: "Error:",
+                message: "We received an error status from Wargaming."
+            })
+            setHasFailed(true);
         }
-    }, [])
+        else if (status !== "ok" && status !== "error") {
+            // This means user is doing stupid => redirect
+            setHasFinished(true);
+        }
+    }, [access_token, account_id, dispatch, hasFailed, nickname, status])
 
     if (hasFinished && !hasFailed) {
-        return <Redirect to={redirect} />
+        // Make sure we don't try to redirect to 'null'
+        return <Redirect to={redirect || ""} />
     }
-    else if (hasFinished && hasFailed) {
-        return <h1>Authentication failed</h1>
+    if (hasFailed) {
+        return (
+            <div className="login-page">
+                <div className="auth-failed">
+                    <h1>
+                        Authentication has failed
+                    </h1>
+                    <p>
+                        We couldn't log you in. Please try again.
+                    </p>
+                </div>
+            </div>
+        )
     }
 
     // DO: if no key, or for whatever reason login fails, display message
-    return <h1>
-        Waiting for redirect, please wait
-    </h1>
+    return (
+        <div className="login-page">
+            <div className="auth-failed">
+                <h1>
+                    Waiting to log you in
+                </h1>
+                <p>
+                    We rely on data from Wargaming to create a seamless experience for you.
+                    It may take some time for Wargaming to send us that data, and then, it
+                    might take us some more time to securely encrypt it.
+                    Usually, this should only take a moment.
+                    Contact us if this takes more than 5 seconds!
+                </p>
+            </div>
+        </div>
+    )
 }
-
-// Encryption
-// const [isEncrypted, setIsEncrypted] = useState(false);
-
-//     const search = window.location.search;
-//     const params = new URLSearchParams(search);
-//     const dispatch = useDispatch();
-
-//     let access_token = params.get('access_token');
-//     let redirect = params.get('redirect');
-//     let status = params.get('status');
-//     let nickname = params.get('nickname');
-//     let account_id = params.get('account_id');
-//     let expires_at = params.get('expires_at');
-
-//     useEffect(() => {
-//         if (status === "ok") {
-//             const encrypt = async () => {
-//                 access_token = await SEA.encrypt(access_token, "getenv_secretkey")
-//                 expires_at = await SEA.encrypt(expires_at, "getenv_secretkey")
-//             }
-
-//             encrypt().then(() => {
-//                 dispatch(login({
-//                     access_token,
-//                     expires_at,
-//                     nickname,
-//                     account_id
-//                 }));
-
-//                 setIsEncrypted(true);
-//             })
-//         }
-//     }, [])
-
-
-//     if (isEncrypted) {
-//         return (
-//             <Redirect to={redirect} />
-//         )
-//     }
-//     else {
-//         return <div>Failed to authenticate</div>
-//     }
 
 export default LoginPage

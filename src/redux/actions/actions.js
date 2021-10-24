@@ -78,12 +78,14 @@ export const logout = () => {
     }
 }
 
-export const flash = (flashObject) => {
+export const flash = ({ delay, timeout, title, message }) => {
     return {
         type: actions.FLASH,
         payload: {
-            title: flashObject.title,
-            message: flashObject.message
+            delay,
+            timeout,
+            title,
+            message
         }
     }
 }
