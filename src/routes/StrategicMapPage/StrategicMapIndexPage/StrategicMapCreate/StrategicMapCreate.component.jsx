@@ -22,7 +22,7 @@ const StrategicMapCreate = ({
 
     const createStrategicMap = async () => {
         // Get UUID from backend
-        fetch("http://www.localhost:8000/api/uuid")
+        fetch("http://www.localhost:8765/api/uuid")
             .then(response => response.json())
             .then(async (data) => {
                 // Should be on backend, for security reasons
@@ -30,31 +30,33 @@ const StrategicMapCreate = ({
                 // someone else's name or inject unsafe code that will be
                 // executed on other user's client)
                 let strategicMap = {
-                    id: data.uuid,
-                    name: name
-                        || null,
-                    description: description
-                        || null,
-                    isPrivate: isPrivate,
-                    owner: user
-                        ? user.account_id
-                        : null,
-                    isLoginRequired: false,
-                    isEditable: true,
-                    willSelfDestruct: false,
-                    maps: [],
-                    arbitraryOverlays: [],
-                    dateCreated: new Date().getTime()
+                    data: {
+                        id: data.uuid,
+                        name: name
+                            || null,
+                        description: description
+                            || null,
+                        isPrivate: isPrivate,
+                        owner: user
+                            ? user.account_id
+                            : null,
+                        isLoginRequired: false,
+                        isEditable: true,
+                        willSelfDestruct: false,
+                        maps: null,
+                        arbitraryOverlays: null,
+                        dateCreated: new Date().getTime()
+                    },
+                    isEncrypted: false
                 }
 
 
-                if (password) {
-                    const pair = await SEA.pair();
-                    const data = await SEA.sign(strategicMap, pair)
+                if (password && isPrivate) {
+                    //const pair = await SEA.pair();
+                    //const data = await SEA.sign(strategicMap, pair)
 
-                    console.log(pair)
-                    console.log(data)
-                    strategicMap = await SEA.encrypt(strategicMap, password);
+                    strategicMap.isEncrypted = true;
+                    strategicMap.data = await SEA.encrypt(strategicMap, password);
                 }
 
                 db.get("stratMap").get(data.uuid).put(strategicMap, () => {

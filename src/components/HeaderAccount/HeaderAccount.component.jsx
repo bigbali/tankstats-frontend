@@ -55,7 +55,6 @@ const HeaderAccount = () => {
                 .then(response => response.json())
                 .then(data => {
                     localStorage.setItem("secret_key", data.encryptionKey)
-                    console.log("NO KEY YO")
                     return data.encryptionKey
                 })
                 .then(key => {
@@ -121,10 +120,15 @@ const HeaderAccount = () => {
         )
     }
 
-    // DO: 
     const LogoutButton = () => {
         return (
             <Button onClick={() => {
+                flashMessage({
+                    delay: 300,
+                    title: "Success:",
+                    message: "Logged out successfully"
+                })
+                localStorage.removeItem("secret_key");
                 dispatch(logout());
             }}>
                 Log out
@@ -139,10 +143,6 @@ const HeaderAccount = () => {
             </span>
         )
     }
-
-    useEffect(() => {
-        console.log(location)
-    }, [location])
 
     return (
         user

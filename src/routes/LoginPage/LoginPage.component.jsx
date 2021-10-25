@@ -43,30 +43,12 @@ const LoginPage = () => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     localStorage.setItem("secret_key", data.encryptionKey)
                     return data.encryptionKey
                 })
                 .then(key => {
                     if (!key) {
                         setHasFailed(true);
-
-                        // Edge case, where user navigates to login page and fills out GET query params correctly
-                        if (store.getState().user) {
-                            flashMessage({
-                                delay: 500,
-                                title: "Error:",
-                                message: "You are logged in already!"
-                            })
-                        }
-                        else {
-                            flashMessage({
-                                delay: 500,
-                                title: "Error:",
-                                message: "Login failed"
-                            })
-                        }
-
                         return null // Prevent trying to decrypt without key
                     }
 
@@ -95,11 +77,6 @@ const LoginPage = () => {
                     })
                 })
                 .catch((error) => {
-                    flashMessage({
-                        delay: 500,
-                        title: "Error:",
-                        message: "Login failed"
-                    })
                     setHasFailed(true);
                 })
         }
@@ -115,13 +92,38 @@ const LoginPage = () => {
             })
             setHasFailed(true);
         }
-        else if (status !== "ok" && status !== "error") {
+        else {
             // This means user is doing stupid => redirect
             setHasFinished(true);
         }
     }, [access_token, account_id, dispatch, hasFailed, nickname, status])
 
+    useEffect(() => {
+        // Edge case, where user navigates to login page and fills out GET query params correctly
+        if (hasFailed) {
+            if (store.getState().user) {
+                flashMessage({
+                    delay: 500,
+                    title: "Error:",
+                    message: "You are logged in already!"
+                })
+            }
+            else {
+                flashMessage({
+                    delay: 500,
+                    title: "Error:",
+                    message: "Login failed"
+                })
+            }
+        }
+    }, [hasFailed])
+
     if (hasFinished && !hasFailed) {
+        // If for some reason login page redirects to login page, redirect to 
+        // home page instead
+        if (redirect && redirect.includes("login")) {
+            return <Redirect to="" />
+        }
         // Make sure we don't try to redirect to 'null'
         return <Redirect to={redirect || ""} />
     }
@@ -140,10 +142,9 @@ const LoginPage = () => {
         )
     }
 
-    // DO: if no key, or for whatever reason login fails, display message
     return (
         <div className="login-page">
-            <div className="auth-failed">
+            <div className="wait-for-login">
                 <h1>
                     Waiting to log you in
                 </h1>
