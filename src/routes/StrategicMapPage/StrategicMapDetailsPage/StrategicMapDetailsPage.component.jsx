@@ -3,67 +3,103 @@ import db from '../../../util/db';
 import axe from 'gun/axe';
 import SEA from 'gun/sea';
 import InputField from '../../../components/InputField';
+import './StrategicMapDetailsPage.style.scss';
 
 window.db = db;
 //let SEA = Gun.SEA()
-
+// FIX: don't rerender whole page on icon drag
 const StrategicMapDetailsPage = ({ id }) => {
-    // SET TO NULL
+    const [password, setPassword] = useState("");
     const [strategicMap, setStrategicMap] = useState(null);
-    //const [isEncrypted, setIsEncrypted] = useState(false);
+    const [mapNode, setMapNode] = useState(null);
+    const [mapArea, setMapArea] = useState(null);
 
     window.stratmap = strategicMap
 
     useEffect(() => {
-        // fetch(`http://www.localhost:8000/api/strategic-maps/${id}`)
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         //console.log(JSON.stringify(data))
-        //         setData(data)
-        //     })
-        //     .catch(error => {
-        //         console.log(error)
-        //     })
-    }, [id])
+        // setX(db.get("stratMap").get(id).on((map, gunid) => {
+        //     console.log(`%cON ${gunid}: ${JSON.stringify(map)}`, "background-color: black; color: white; padding: 0.25rem");
+
+        //     //setStrategicMap(map)
+        // }))
+        setMapNode(db.get("stratMap").get(id).on((map, gunid) => {
+            setStrategicMap(map)
+        }))
+    }, [])
 
     useEffect(() => {
-        db.get("stratMap").get(id).on((value, gunid) => {
-            console.log(`%cON ${gunid}: ${JSON.stringify(value)}`, "background-color: black; color: white; padding: 0.25rem");
+        const decr = async () => {
+            if (strategicMap) {
+                const decrypted = await SEA.decrypt(strategicMap.data, password)
 
-            // If 404, we never get here to begin with
-            setStrategicMap(value)
+                if (decrypted) {
+                    setStrategicMap(prev => ({
+                        ...prev,
+                        data: decrypted
+                    }))
+                    console.log(document.querySelector("#map"))
+                    setMapArea(document.querySelector("#map").getBoundingClientRect());
 
-            // if (value.isEncrypted) {
-            //     setIsEncrypted(true)
-            // }
-            // else {
-            // }
+                }
+            }
+        }
+        decr()
+    }, [password, strategicMap])
 
-            // if (!data) {
-            //     data = await SEA.decrypt(value, "password")
-            // }
-
-            // const decrypted = await SEA.decrypt(value, "password")
-            // console.log(decrypted)
-
-
-            // setData(previousData => ({
-            //     //...previousData,
-            //     // [gunid]: {
-            //     //     id: gunid,
-            //     //     name: value.name,
-            //     //     description: value.description,
-            //     //     owner: value.owner,
-            //     //     passwordProtected: value.passwordProtected
-            //     // }
-            //     [gunid]: data
-            // }))
-        })
-    }, [])
 
     // useEffect(() => {
     //     console.log(`%cState updated.`, "background-color: purple; color: white; padding: 0.25rem")
     // }, [data])
+
+    const mapOverlays = (overlays) => {
+        if (overlays) {
+            return (
+                <img src={overlays._0.icon} alt="" style={{ width: "3rem", position: "absolute", left: overlays._0.x + "px" }}
+                    // onClick={async (e) => {
+
+                    //     const data = {
+                    //         ...strategicMap.data,
+                    //         name: strategicMap.data.name + "1",
+                    //         overlays: {
+                    //             _0: {
+                    //                 icon: strategicMap.data.overlays._0.icon,
+                    //                 x: strategicMap.data.overlays._0.x + 10,
+                    //                 y: strategicMap.data.overlays._0.y + 10,
+                    //             }
+                    //         }
+                    //     }
+                    //     const encr = await SEA.encrypt(data, password)
+
+                    //     mapNode.put({ data: encr }, (ack) => {
+                    //         console.log(ack)
+                    //     })
+                    // }}
+                    draggable="true"
+                    onDrag={async (e) => {
+
+                        const x = e.clientX - mapArea.left;
+                        const y = e.clientY - mapArea.top;
+
+                        const data = {
+                            ...strategicMap.data,
+                            name: strategicMap.data.name + "1",
+                            overlays: {
+                                _0: {
+                                    icon: strategicMap.data.overlays._0.icon,
+                                    x: x,
+                                    y: y,
+                                }
+                            }
+                        }
+                        const encr = await SEA.encrypt(data, password)
+
+                        mapNode.put({ data: encr }, (ack) => {
+                            console.log(ack)
+                        })
+                    }} />
+            )
+        }
+    }
 
     if (strategicMap) {
         if (strategicMap.isEncrypted) {
@@ -74,24 +110,18 @@ const StrategicMapDetailsPage = ({ id }) => {
                     }}>
                         This data is encrypted.
                         <InputField
-                            onChange={async (value) => {
-                                const decrypted = await SEA.decrypt(strategicMap.data, value)
-
-                                if (decrypted) {
-                                    setStrategicMap(encryptedStrategicMap => {
-                                        console.log(encryptedStrategicMap)
-                                        console.log(decrypted)
-                                        // Dunno wtf this is
-                                        return {
-                                            ...encryptedStrategicMap,
-                                            ...decrypted
-                                        }
-                                    })
-                                }
+                            onChange={value => {
+                                setPassword(value)
                             }}
                         />
                     </h2>
                     <pre>{JSON.stringify(strategicMap, "null", 4)}</pre>
+                    <div>
+                        <div className="overlay">
+                            {mapOverlays(strategicMap.data.overlays)}
+                        </div>
+                        <img src={strategicMap.data.map} alt="" id="map" style={{ width: "20rem", height: "20rem" }} />
+                    </div>
                 </>
             )
         }

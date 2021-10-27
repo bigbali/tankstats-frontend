@@ -10,6 +10,14 @@ import TextField from '../../../../components/TextField';
 import './StrategicMapCreate.style.scss';
 import Checkbox from '../../../../components/Checkbox';
 
+const wtfOverlay = {
+    _0: {
+        icon: "https://tankstats.s3.eu-central-1.amazonaws.com/media/arctic-region-standard.png",
+        x: 0,
+        y: 0
+    }
+}
+
 const StrategicMapCreate = ({
     isExpanded,
     setIsExpanded
@@ -33,19 +41,22 @@ const StrategicMapCreate = ({
                     data: {
                         id: data.uuid,
                         name: name
-                            || null,
+                            || "",
                         description: description
-                            || null,
-                        isPrivate: isPrivate,
+                            || "",
+                        blacklist: {                // Blacklist users
+                            users: null,
+                            except: null            // Allows exceptions if
+                        },
                         owner: user
                             ? user.account_id
                             : null,
                         isLoginRequired: false,
                         isEditable: true,
-                        willSelfDestruct: false,
-                        maps: null,
-                        arbitraryOverlays: null,
-                        dateCreated: new Date().getTime()
+                        map: "https://tankstats.s3.eu-central-1.amazonaws.com/media/arctic-region-standard.png",
+                        overlays: wtfOverlay,
+                        dateCreated: new Date().getTime(),
+                        selfDestruct: null,
                     },
                     isEncrypted: false
                 }
