@@ -38,27 +38,25 @@ const StrategicMapCreate = ({
                 // someone else's name or inject unsafe code that will be
                 // executed on other user's client)
                 let strategicMap = {
-                    data: {
-                        id: data.uuid,
+                    isEncrypted: false,
+                    id: data.uuid,
+                    map: {
+                        background: "https://tankstats.s3.eu-central-1.amazonaws.com/media/arctic-region-standard.png",
+                        overlays: {
+                            overlay0: {
+                                id: "overlay0",
+                                icon: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F461042965385715712%2FURAC-hGN.jpeg&f=1&nofb=1",
+                                x: 0,
+                                y: 0
+                            }
+                        }
+                    },
+                    registry: {
                         name: name
                             || "",
                         description: description
                             || "",
-                        blacklist: {                // Blacklist users
-                            users: null,
-                            except: null            // Allows exceptions if
-                        },
-                        owner: user
-                            ? user.account_id
-                            : null,
-                        isLoginRequired: false,
-                        isEditable: true,
-                        map: "https://tankstats.s3.eu-central-1.amazonaws.com/media/arctic-region-standard.png",
-                        overlays: wtfOverlay,
-                        dateCreated: new Date().getTime(),
-                        selfDestruct: null,
                     },
-                    isEncrypted: false
                 }
 
 
@@ -67,7 +65,8 @@ const StrategicMapCreate = ({
                     //const data = await SEA.sign(strategicMap, pair)
 
                     strategicMap.isEncrypted = true;
-                    strategicMap.data = await SEA.encrypt(strategicMap, password);
+                    strategicMap.map = await SEA.encrypt(strategicMap.map, password);
+                    strategicMap.registry = await SEA.encrypt(strategicMap.registry, password);
                 }
 
                 db.get("stratMap").get(data.uuid).put(strategicMap, () => {
